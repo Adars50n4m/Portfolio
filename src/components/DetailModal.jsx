@@ -53,7 +53,7 @@ const DetailModal = ({ item, onClose, onPlay, onToggleList, isAdded }) => {
 
                         <div className="relative z-20 w-full">
                             <h2 className="text-3xl md:text-5xl font-bold mb-2 drop-shadow-lg">
-                                {item.title || (item.file ? item.file.replace('.mp4', '').replace(/_/g, ' ') : "Untitled")}
+                                {item.title || (item.file ? item.file.split('/').pop().replace('.mp4', '').replace(/_/g, ' ').replace(/%20/g, ' ') : "Untitled")}
                             </h2>
 
                             {/* Meta Row */}

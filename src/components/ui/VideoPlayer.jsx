@@ -29,9 +29,11 @@ const VideoPlayer = ({ video, onClose }) => {
     if (!video) return null;
 
     // Construct path (similar to VideoCard logic)
-    const videoPath = video.file && video.folder
-        ? `/videos/Clips/${video.folder}/${video.file}`
-        : '';
+    // Construct path (check for remote URL first)
+    const isUrl = video.file && (video.file.startsWith('http') || video.file.startsWith('//'));
+    const videoPath = isUrl
+        ? video.file
+        : (video.file && video.folder ? `/videos/Clips/${video.folder}/${video.file}` : '');
 
     // Fallback if no video path or external link logic needed later
     const hasVideo = !!videoPath && !loadError;

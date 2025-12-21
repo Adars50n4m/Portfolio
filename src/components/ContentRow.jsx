@@ -86,8 +86,18 @@ const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick }) => {
     const isVideo = item.type === 'video' || !item.type || item.file; // Fallback detection
 
     // Safe access for video properties
-    const videoPath = isVideo && item.file && item.folder ? `/videos/Clips/${item.folder}/${item.file}` : '';
-    const videoTitle = isVideo && item.file ? item.file.replace('.mp4', '').replace(/_/g, ' ') : item.title;
+    // Safe access for video properties
+    const isUrl = item.file && (item.file.startsWith('http') || item.file.startsWith('//'));
+    const videoPath = isUrl ? item.file : (isVideo && item.file && item.folder ? `/videos/Clips/${item.folder}/${item.file}` : '');
+
+    const getTitle = (file) => {
+        if (!file) return item.title;
+        // If it's a URL, get the last part
+        const filename = file.split('/').pop();
+        return filename.replace('.mp4', '').replace(/_/g, ' ').replace(/%20/g, ' ');
+    };
+
+    const videoTitle = isVideo ? getTitle(item.file) : item.title;
 
     useEffect(() => {
         if (isVideo && videoRef.current) {
