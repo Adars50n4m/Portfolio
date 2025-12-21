@@ -151,12 +151,11 @@ const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick }) => {
                     <video
                         ref={videoRef}
                         src={videoPath}
-                        className="w-full h-full object-cover relative z-10 opacity-0 hover:opacity-100 transition-opacity duration-300"
+                        className="w-full h-full object-cover relative z-10 hover:opacity-100 transition-opacity duration-300"
                         muted
                         loop={false}
                         preload="metadata"
                         poster={item.thumbnail}
-                        onLoadedData={(e) => e.target.classList.remove('opacity-0')} // Reveal if loaded
                         onError={(e) => e.target.style.display = 'none'} // Hide if fails
                     />
                 ) : (
