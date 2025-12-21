@@ -124,7 +124,7 @@ const App = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/videos');
+        const response = await fetch('/api/videos');
         if (!response.ok) throw new Error('API Error');
         const data = await response.json();
 
