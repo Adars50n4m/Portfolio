@@ -37,42 +37,39 @@ const VIMEO_ACCESS_TOKEN = 'ea5f0c2dbff1f11f643665a3dab2937ac7aeb826';
 const vimeoClient = new Vimeo('placeholder_id', 'placeholder_secret', VIMEO_ACCESS_TOKEN);
 
 app.post('/api/admin/migrate-vimeo', async (req, res) => {
-    console.log('Starting Vimeo Migration...');
+    console.log('Starting Vimeo Migration (Debug Mode)...');
     try {
-        const videos = await Video.find({ vimeoId: { $exists: false } });
-        let initiated = 0;
+        const video = await Video.findOne({ vimeoId: { $exists: false }, file: { $regex: /^https:/ } });
 
-        // Process in background to avoid timeout
-        (async () => {
-            for (const video of videos) {
-                if (!video.file || !video.file.startsWith('https://')) continue;
+        if (!video) {
+            return res.json({ message: 'No eligible videos found for migration.' });
+        }
 
-                console.log(`Processing: ${video.title}`);
+        console.log(`Debug Processing: ${video.title}`);
 
-                vimeoClient.request({
-                    method: 'POST',
-                    path: '/me/videos',
-                    query: {
-                        upload: { approach: 'pull', link: video.file },
-                        name: video.title,
-                        description: video.category
-                    }
-                }, async (error, body, statusCode) => {
-                    if (!error && (statusCode === 200 || statusCode === 201)) {
-                        video.vimeoId = body.uri; // e.g., /videos/12345
-                        await video.save();
-                        console.log(`Migrated: ${video.title} -> ${body.uri}`);
-                    } else {
-                        console.error(`Failed: ${video.title}`, error);
-                    }
-                });
-
-                // Small delay to prevent rate limit
-                await new Promise(r => setTimeout(r, 1000));
+        vimeoClient.request({
+            method: 'POST',
+            path: '/me/videos',
+            query: {
+                upload: { approach: 'pull', link: video.file },
+                name: video.title,
+                description: video.category
             }
-        })();
+        }, async (error, body, statusCode) => {
+            if (error) {
+                console.error(`Debug Failed: ${video.title}`, error);
+                return res.status(500).json({ error: error, body: body, statusCode: statusCode });
+            }
 
-        res.json({ message: `Migration started for ${videos.length} videos. check logs.` });
+            if (statusCode === 200 || statusCode === 201) {
+                video.vimeoId = body.uri;
+                await video.save();
+                return res.json({ success: true, migrated: video.title, vimeoUri: body.uri, fullBody: body });
+            } else {
+                return res.status(statusCode).json({ error: 'Vimeo Error', body: body });
+            }
+        });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: err.message });
