@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
-const Video = require('./models/Video');
-require('dotenv').config();
+import mongoose from 'mongoose';
+import Video from './models/Video.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/portfolio';
 

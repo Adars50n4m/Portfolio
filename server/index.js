@@ -1,8 +1,14 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const path = require('path');
-require('dotenv').config();
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import path from 'path';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -24,7 +30,7 @@ mongoose.connect(MONGO_URI || 'mongodb://localhost:27017/portfolio', {
     .catch(err => console.error('MongoDB Connection Error:', err));
 
 // Video Routes
-const Video = require('./models/Video');
+import Video from './models/Video.js';
 
 app.get('/api/videos', async (req, res) => {
     try {
