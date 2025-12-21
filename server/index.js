@@ -33,7 +33,7 @@ mongoose.connect(MONGO_URI || 'mongodb://localhost:27017/portfolio', {
 // Video Routes
 import Video from './models/Video.js';
 
-const VIMEO_ACCESS_TOKEN = 'ea5f0c2dbff1f11f643665a3dab2937ac7aeb826';
+const VIMEO_ACCESS_TOKEN = 'e4deedd05d3fdaa530fbf3ad51033078';
 
 app.post('/api/admin/migrate-vimeo', async (req, res) => {
     console.log('Starting Vimeo Migration (Fetch Mode)...');
