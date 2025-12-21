@@ -49,7 +49,7 @@ app.post('/api/admin/migrate-vimeo', async (req, res) => {
         const response = await fetch('https://api.vimeo.com/me/videos', {
             method: 'POST',
             headers: {
-                'Authorization': `bearer ${VIMEO_ACCESS_TOKEN}`,
+                'Authorization': `Bearer ${VIMEO_ACCESS_TOKEN}`,
                 'Content-Type': 'application/json',
                 'Accept': 'application/vnd.vimeo.*+json;version=3.4'
             },
