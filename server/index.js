@@ -34,10 +34,9 @@ mongoose.connect(MONGO_URI || 'mongodb://localhost:27017/portfolio', {
 import Video from './models/Video.js';
 
 const VIMEO_ACCESS_TOKEN = 'ea5f0c2dbff1f11f643665a3dab2937ac7aeb826';
-const vimeoClient = new Vimeo('placeholder_id', 'placeholder_secret', VIMEO_ACCESS_TOKEN);
 
 app.post('/api/admin/migrate-vimeo', async (req, res) => {
-    console.log('Starting Vimeo Migration (Debug Mode)...');
+    console.log('Starting Vimeo Migration (Fetch Mode)...');
     try {
         const video = await Video.findOne({ vimeoId: { $exists: false }, file: { $regex: /^https:/ } });
 
@@ -47,28 +46,33 @@ app.post('/api/admin/migrate-vimeo', async (req, res) => {
 
         console.log(`Debug Processing: ${video.title}`);
 
-        vimeoClient.request({
+        const response = await fetch('https://api.vimeo.com/me/videos', {
             method: 'POST',
-            path: '/me/videos',
-            query: {
-                upload: { approach: 'pull', link: video.file },
+            headers: {
+                'Authorization': `bearer ${VIMEO_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.vimeo.*+json;version=3.4'
+            },
+            body: JSON.stringify({
+                upload: {
+                    approach: 'pull',
+                    link: video.file
+                },
                 name: video.title,
                 description: video.category
-            }
-        }, async (error, body, statusCode) => {
-            if (error) {
-                console.error(`Debug Failed: ${video.title}`, error);
-                return res.status(500).json({ error: error, body: body, statusCode: statusCode });
-            }
-
-            if (statusCode === 200 || statusCode === 201) {
-                video.vimeoId = body.uri;
-                await video.save();
-                return res.json({ success: true, migrated: video.title, vimeoUri: body.uri, fullBody: body });
-            } else {
-                return res.status(statusCode).json({ error: 'Vimeo Error', body: body });
-            }
+            })
         });
+
+        const body = await response.json();
+
+        if (response.ok) {
+            video.vimeoId = body.uri; // /videos/123456
+            await video.save();
+            return res.json({ success: true, migrated: video.title, vimeoUri: body.uri, fullBody: body });
+        } else {
+            console.error(`Debug Failed: ${video.title}`, body);
+            return res.status(response.status).json({ error: 'Vimeo API Error', body: body });
+        }
 
     } catch (err) {
         console.error(err);
