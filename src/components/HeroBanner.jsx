@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const HeroBanner = () => {
     // Using one of the Bihar videos as the hero background
-    const heroVideo = "/videos/Clips/Bihar/Bihar Scene 2.mp4";
+    const heroVideo = "https://portfoliovideosadarsh.blob.core.windows.net/videos/Clips/Bihar/Bihar%20Scene%202.mp4";
 
     const variants = {
         hidden: { opacity: 0, y: 50 },
