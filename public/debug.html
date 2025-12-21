@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Debug</title>
+</head>
+<body style="background-color: #222; color: white; text-align: center; padding: 20px;">
+    <h1>Azure Video Direct Playback Test</h1>
+    <p>If these videos play, the issue is in the React App logic.</p>
+    
+    <h3>1. Direct Video Tag (Controls, Muted)</h3>
+    <video controls width="600" muted>
+        <source src="https://portfoliovideosadarsh.blob.core.windows.net/videos/Clips/Bihar/Bengal%20Femine%203.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h3>2. Direct Video Tag (AutoPlay, Link)</h3>
+    <a href="https://portfoliovideosadarsh.blob.core.windows.net/videos/Clips/Bihar/Bengal%20Femine%203.mp4" target="_blank" style="color: cyan;">
+        Click to Open Video Directly in Browser
+    </a>
+
+</body>
+</html>
