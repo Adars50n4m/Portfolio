@@ -56,17 +56,28 @@ const VideoPlayer = ({ video, onClose }) => {
             {/* Video Container */}
             <div className="w-full h-full relative flex items-center justify-center">
                 {hasVideo ? (
-                    <video
-                        ref={videoRef}
-                        src={videoPath}
-                        className="w-full h-full object-contain"
-                        controls
-                        autoPlay
-                        poster={video.thumbnail}
-                        onError={() => setLoadError(true)}
-                    >
-                        Your browser does not support the video tag.
-                    </video>
+                    isUrl && videoPath.includes('youtu') ? (
+                        <iframe
+                            src={`https://www.youtube.com/embed/${videoPath.split('/').pop().split('?')[0]}?autoplay=1`}
+                            className="w-full h-full object-contain"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            title="YouTube video player"
+                        />
+                    ) : (
+                        <video
+                            ref={videoRef}
+                            src={videoPath}
+                            className="w-full h-full object-contain"
+                            controls
+                            autoPlay
+                            poster={video.thumbnail}
+                            onError={() => setLoadError(true)}
+                        >
+                            Your browser does not support the video tag.
+                        </video>
+                    )
                 ) : (
                     <div className="flex flex-col items-center justify-center h-full text-white space-y-4 p-8 text-center bg-black/90 w-full">
                         {video.thumbnail ? (

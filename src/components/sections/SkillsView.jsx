@@ -1,168 +1,144 @@
-
 import React, { useState } from 'react';
-import GlassCard from '../ui/GlassCard';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Layers, Command, Cpu, Palette, Code, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const SkillsView = ({ skills = [], onItemClick }) => {
-    const [filter, setFilter] = useState("All");
+// --- REAL LOGOS (Recreated via SVG) ---
+const Icons = {
+    // Adobe Premiere Pro (Pr)
+    Pr: () => (
+        <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+            <rect x="5" y="5" width="90" height="90" rx="20" stroke="currentColor" strokeWidth="6" fill="currentColor" fillOpacity="0.1" />
+            <text x="50" y="60" textAnchor="middle" fill="currentColor" fontSize="45" fontFamily="Arial, sans-serif" fontWeight="900" letterSpacing="-2">Pr</text>
+        </svg>
+    ),
 
-    // Extract unique categories
-    const categories = ["All", ...new Set(skills.map(s => s.category))];
+    // Adobe After Effects (Ae)
+    Ae: () => (
+        <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+            <rect x="5" y="5" width="90" height="90" rx="20" stroke="currentColor" strokeWidth="6" fill="currentColor" fillOpacity="0.1" />
+            <text x="50" y="60" textAnchor="middle" fill="currentColor" fontSize="45" fontFamily="Arial, sans-serif" fontWeight="900" letterSpacing="-2">Ae</text>
+        </svg>
+    ),
 
-    const filteredSkills = filter === "All"
-        ? skills
-        : skills.filter(s => s.category === filter);
+    // CapCut (Stylized C shape)
+    Cap: () => (
+        <svg viewBox="0 0 100 100" className="w-full h-full" fill="currentColor">
+            {/* Simplified CapCut Shape */}
+            <path d="M30 20 C 10 20, 10 50, 30 50 L 70 50 L 70 40 L 30 40 C 20 40, 20 30, 30 30 L 80 30 L 80 20 Z" />
+            <path d="M70 80 C 90 80, 90 50, 70 50 L 30 50 L 30 60 L 70 60 C 80 60, 80 70, 70 70 L 20 70 L 20 80 Z" />
+        </svg>
+    ),
 
-    const getCategoryIcon = (cat) => {
-        switch (cat) {
-            case "Video": return <Layers size={18} />;
-            case "Design": return <Palette size={18} />;
-            case "AI": return <Sparkles size={18} />;
-            case "Tech": return <Code size={18} />;
-            default: return <Command size={18} />;
-        }
-    };
+    // Adobe Photoshop (Ps)
+    Ps: () => (
+        <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+            <rect x="5" y="5" width="90" height="90" rx="20" stroke="currentColor" strokeWidth="6" fill="currentColor" fillOpacity="0.1" />
+            <text x="50" y="60" textAnchor="middle" fill="currentColor" fontSize="45" fontFamily="Arial, sans-serif" fontWeight="900" letterSpacing="-2">Ps</text>
+        </svg>
+    ),
 
-    // Staggered Container
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.05
-            }
-        }
-    };
+    Arrow: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+};
 
-    const itemVariants = {
-        hidden: { opacity: 0, scale: 0.8, y: 20 },
-        visible: { opacity: 1, scale: 1, y: 0 }
-    };
+const SkillsView = ({ skills = [] }) => {
+    const [activeId, setActiveId] = useState(null);
 
     return (
-        <div className="pt-32 pb-20 px-4 md:px-12 min-h-screen relative z-10">
-            <div className="mb-16 text-center md:text-left">
-                <motion.h2
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-6xl md:text-8xl font-black text-white mb-6 tracking-tighter drop-shadow-2xl"
-                >
-                    <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-blue-100 to-white/40">Toolbox</span>
-                </motion.h2>
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-blue-200/80 text-xl max-w-2xl leading-relaxed backdrop-blur-sm"
-                >
-                    High-performance creative stack.
-                </motion.p>
-            </div>
+        <div className="w-full min-h-screen py-20 px-4 md:px-20 flex flex-col gap-4 relative z-10">
 
-            {/* Filter Tabs - Floating Pills */}
-            <div className="flex flex-wrap gap-3 mb-16 justify-center md:justify-start">
-                {categories.map((cat, idx) => (
-                    <motion.button
-                        key={cat}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        onClick={() => setFilter(cat)}
-                        className={`px-8 py-3 rounded-full backdrop-blur-md transition-all duration-300 flex items-center gap-3 font-semibold text-sm tracking-wide border
-                        ${filter === cat
-                                ? 'bg-white text-black border-white scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)]'
-                                : 'bg-black/30 text-white/60 border-white/5 hover:bg-white/10 hover:text-white hover:border-white/20'
-                            } `}
+            {skills.map((skill) => {
+                const isActive = activeId === skill.id;
+                const IconComponent = Icons[skill.code] || Icons.Pr;
+
+                // Vertical Stack Logic:
+                // If nothing active: all equal height (flex-1)
+                // If active: active one expands significantly, others shrink
+                const flexClass = activeId === null
+                    ? 'flex-1 opacity-90 hover:opacity-100 hover:flex-[1.2]' // Hover expands slightly
+                    : isActive
+                        ? 'flex-[8] opacity-100' // Increased expansion ratio
+                        : 'flex-[0.5] opacity-50 hover:opacity-80';
+
+                return (
+                    <div
+                        key={skill.id}
+                        onClick={() => setActiveId(isActive ? null : skill.id)}
+                        className={`
+                            relative rounded-2xl overflow-hidden cursor-pointer
+                            transform-gpu transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
+                            ${flexClass}
+                            bg-gradient-to-br ${skill.bgGradient}
+                            border border-white/10
+                            ${!isActive ? 'hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]' : ''}
+                        `}
                     >
-                        {cat !== "All" && getCategoryIcon(cat)}
-                        {cat}
-                    </motion.button>
-                ))}
-            </div>
-
-            {/* Grid */}
-            <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                layout
-                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
-            >
-                <AnimatePresence mode='popLayout'>
-                    {filteredSkills.map((skill) => (
-                        <motion.div
-                            layout
-                            variants={{
-                                hidden: { opacity: 0, scale: 0.9, filter: "blur(10px)", y: 20 },
-                                visible: {
-                                    opacity: 1,
-                                    scale: 1,
-                                    filter: "blur(0px)",
-                                    y: 0,
-                                    transition: { duration: 0.5, ease: "easeOut" }
-                                }
-                            }}
-                            exit={{ opacity: 0, scale: 0.5, filter: "blur(10px)", transition: { duration: 0.2 } }}
-                            key={skill.id}
-                            onClick={() => onItemClick && onItemClick(skill)}
-                            className={`${onItemClick ? 'cursor-pointer' : ''} group perspective-1000`}
-                        >
-                            <GlassCard className="h-full items-center text-center !p-6 !rounded-[2rem] hover:bg-white/[0.08] border-white/5 group-hover:border-white/20 transition-all duration-500 group-hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.1)]">
-                                <div className="flex flex-col items-center h-full">
-                                    {/* Logo Container - Floating & Glowing */}
-                                    <div className="w-20 h-20 mb-6 relative transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2">
-                                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                                        <div className="relative w-full h-full bg-black/40 rounded-2xl flex items-center justify-center p-3 shadow-inner border border-white/5 overflow-hidden">
-                                            {/* Shine effect */}
-                                            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                                            {skill.icon && skill.icon.startsWith('http') ? (
-                                                <img
-                                                    src={skill.icon}
-                                                    alt={skill.name}
-                                                    className="w-full h-full object-contain drop-shadow-md z-10"
-                                                    onError={(e) => {
-                                                        e.target.onerror = null;
-                                                        e.target.style.display = 'none';
-                                                        e.target.nextSibling.style.display = 'block';
-                                                    }}
-                                                />
-                                            ) : null}
-                                            <div className="hidden text-white/50">
-                                                <Cpu size={28} />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <h3 className="text-lg font-bold text-white mb-3 tracking-tight group-hover:text-blue-200 transition-colors">{skill.name}</h3>
-
-                                    <div className="mt-auto w-full">
-                                        <div className={`h-1 w-full rounded-full bg-white/10 overflow-hidden mb-2`}>
-                                            <div className={`h-full rounded-full ${skill.level === 'Expert' ? 'bg-gradient-to-r from-emerald-400 to-emerald-600 w-[95%]' :
-                                                skill.level === 'Advanced' ? 'bg-gradient-to-r from-blue-400 to-blue-600 w-[80%]' :
-                                                    'bg-gradient-to-r from-purple-400 to-purple-600 w-[60%]'
-                                                }`} />
-                                        </div>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest
-                                            ${skill.level === 'Expert' ? 'text-emerald-400' :
-                                                skill.level === 'Advanced' ? 'text-blue-400' :
-                                                    'text-purple-400'
-                                            } `}>
-                                            {skill.level}
-                                        </span>
-                                    </div>
+                        {/* --- INACTIVE STATE (COLLAPSED) --- */}
+                        {!isActive && (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center h-full">
+                                <div className={`text-2xl md:text-5xl font-bold font-display tracking-widest uppercase vertical-text text-white/20 group-hover:text-white/50 transition-colors duration-300`}>
+                                    {skill.name}
                                 </div>
-                            </GlassCard>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
-            </motion.div>
+                            </div>
+                        )}
+
+                        {/* --- ACTIVE STATE (EXPANDED) --- */}
+                        <div className={`
+                            absolute inset-0 p-6 md:p-12 flex flex-col justify-between
+                            transition-all duration-700
+                            ${isActive ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-10 pointer-events-none'}
+                        `}>
+
+                            {/* Top Section */}
+                            <div className="flex justify-between items-start relative z-20">
+                                <div>
+                                    <div className={`inline-block px-3 py-1 mb-4 text-[10px] md:text-xs font-bold tracking-widest text-black uppercase ${skill.color} rounded-sm`}>
+                                        {skill.tagline}
+                                    </div>
+                                    <h1 className="text-4xl md:text-8xl font-display text-white uppercase leading-[0.9]">
+                                        {skill.name.split(' ').map((word, i) => (
+                                            <span key={i} className="block">{word}</span>
+                                        ))}
+                                    </h1>
+                                </div>
+
+                                {/* Background Giant Icon Faded */}
+                                <div className={`absolute -right-10 -top-10 w-[200px] h-[200px] md:w-[500px] md:h-[500px] ${skill.textColor} opacity-5 pointer-events-none`}>
+                                    <IconComponent />
+                                </div>
+                            </div>
+
+                            {/* Bottom Content */}
+                            <div className="flex flex-col md:flex-row items-end justify-between gap-8 relative z-20">
+
+                                <div className="max-w-md hidden md:block">
+                                    <p className="text-lg text-gray-400 font-light leading-relaxed border-l-2 border-white/20 pl-6">
+                                        {skill.desc}
+                                    </p>
+                                </div>
+
+                                {/* Interactive Stats Grid */}
+                                <div className="flex gap-2 md:gap-4 w-full md:w-auto">
+                                    {(skill.stats || []).map((stat, i) => (
+                                        <div key={i} className="flex-1 md:flex-none w-full md:w-24 h-20 md:h-24 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 flex flex-col items-center justify-center group hover:bg-white/10 transition-colors">
+                                            <span className="text-xl md:text-2xl font-bold text-white mb-1">{stat.value}</span>
+                                            <span className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wide">{stat.label}</span>
+                                        </div>
+                                    ))}
+
+                                    {/* Action Button */}
+                                    <button className={`hidden md:flex w-24 h-24 rounded-full ${skill.color} items-center justify-center hover:scale-110 transition-transform cursor-pointer text-black`}>
+                                        <Icons.Arrow />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Overlay Gradient for Depth */}
+                        <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent pointer-events-none ${isActive ? 'opacity-100' : 'opacity-0'}`}></div>
+                    </div>
+                );
+            })}
         </div>
     );
 };
 
 export default SkillsView;
-

@@ -1,12 +1,27 @@
+import React, { useState } from 'react';
 
-import React from 'react';
-import GlassCard from '../ui/GlassCard';
-import { GraduationCap, Award, CheckCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { GraduationCap, Award, MapPin, ArrowUpRight, Crown, Calendar } from 'lucide-react';
 
-const EducationView = ({ education = [], onItemClick }) => {
+// Gold/Amber Theme configuration
+const THEMES = [
+    {
+        id: 'theme-gold',
+        bgGradient: 'from-amber-900/40 via-yellow-900/40 to-black',
+        accentColor: 'text-amber-400',
+        borderColor: 'border-amber-500/20',
+        glow: 'shadow-[0_0_30px_rgba(245,158,11,0.1)]'
+    },
+    {
+        id: 'theme-yellow',
+        bgGradient: 'from-yellow-900/40 via-orange-900/40 to-black',
+        accentColor: 'text-yellow-400',
+        borderColor: 'border-yellow-500/20',
+        glow: 'shadow-[0_0_30px_rgba(234,179,8,0.1)]'
+    }
+];
 
-    // Ensure education is an array
+const EducationView = ({ education = [] }) => {
+    const [activeId, setActiveId] = useState(null);
     const safeDisplayItems = Array.isArray(education) ? education : [];
 
     if (safeDisplayItems.length === 0) {
@@ -14,94 +29,134 @@ const EducationView = ({ education = [], onItemClick }) => {
     }
 
     return (
-        <div className="pt-32 pb-20 px-4 md:px-12 min-h-screen relative z-10">
-            <div className="mb-20 text-center md:text-right">
-                <h2 className="text-6xl md:text-8xl font-black text-white mb-6 tracking-tighter drop-shadow-2xl">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-100 via-amber-200 to-yellow-500">Credentials</span>
+        <div className="w-full min-h-screen py-32 px-4 md:px-20 flex flex-col gap-4 relative z-10">
+            {/* Header */}
+            <div className="mb-8 md:mb-12 text-center">
+                <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-4">
+                    Academic <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-600">History</span>
                 </h2>
-                <div className="h-1 w-32 bg-yellow-500/50 rounded-full ml-auto mr-4 md:mr-0 animate-pulse" />
             </div>
 
-            <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={{
-                    visible: { transition: { staggerChildren: 0.2 } }
-                }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto"
-            >
+            {/* The Deck Container */}
+            <div className="flex flex-col gap-4 min-h-[600px]">
                 {safeDisplayItems.map((item, index) => {
-                    const isDegree = item.title.includes('Bachelor') || item.title.includes('Degree');
+                    const isActive = activeId === item.id;
+                    const theme = THEMES[index % THEMES.length];
+                    const isDegree = item.title.toLowerCase().includes('bachelor') || item.title.toLowerCase().includes('degree');
+
+                    // Vertical Stack Logic
+                    const flexClass = activeId === null
+                        ? 'flex-1 opacity-90 hover:opacity-100 hover:flex-[1.2]'
+                        : isActive
+                            ? 'flex-[5] opacity-100'
+                            : 'flex-[0.5] opacity-40 hover:opacity-60';
 
                     return (
-                        <motion.div
+                        <div
                             key={item.id}
-                            variants={{
-                                hidden: { opacity: 0, scale: 0.9, filter: "blur(10px)" },
-                                visible: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.6 } }
-                            }}
-                            onClick={() => onItemClick && onItemClick(item)}
-                            className="cursor-pointer group perspective-1000"
+                            onClick={() => setActiveId(isActive ? null : item.id)}
+                            className={`
+                                relative rounded-2xl overflow-hidden cursor-pointer
+                                transform-gpu transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
+                                ${flexClass}
+                                bg-gradient-to-br ${theme.bgGradient}
+                                border border-white/5 hover:border-amber-500/30
+                                ${isActive ? theme.borderColor : ''}
+                                ${!isActive ? `hover:scale-[1.01] hover:${theme.glow}` : ''}
+                            `}
                         >
-                            <GlassCard delay={0} className="h-full !rounded-[2.5rem] border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-yellow-500/20 transition-all duration-500 group-hover:shadow-[0_0_50px_rgba(234,179,8,0.1)]">
-                                <div className="flex flex-col h-full relative overflow-hidden">
-
-                                    {/* Abstract Glass Shape */}
-                                    <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-yellow-500/10 to-transparent blur-[80px] -mr-20 -mt-20 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-500" />
-
-                                    {/* Header */}
-                                    <div className="flex items-start justify-between mb-8 relative z-10">
-                                        <div className="items-center justify-center flex w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500/30 text-yellow-400 shadow-[0_0_30px_rgba(234,179,8,0.2)] group-hover:scale-110 transition-transform duration-500">
-                                            {isDegree ? <GraduationCap className="w-10 h-10" /> : <Award className="w-10 h-10" />}
+                            {/* --- INACTIVE STATE (COLLAPSED) --- */}
+                            {!isActive && (
+                                <div className="absolute inset-0 flex items-center px-8 md:px-16 justify-center group">
+                                    {/* Center: Degree Name */}
+                                    <div className="flex flex-col items-center gap-3 text-center">
+                                        <div className={`p-3 rounded-full bg-amber-500/10 border border-amber-500/20 ${theme.accentColor} mb-2 group-hover:scale-110 transition-transform`}>
+                                            {isDegree ? <GraduationCap className="w-6 h-6" /> : <Award className="w-6 h-6" />}
                                         </div>
-                                        <div className="text-yellow-200/80 font-mono text-sm font-bold tracking-widest border border-yellow-500/20 px-4 py-2 rounded-full bg-yellow-500/5 backdrop-blur-md group-hover:bg-yellow-500/10 transition-colors">
+                                        <span className={`text-xl md:text-4xl font-black text-white/50 group-hover:text-white transition-colors uppercase tracking-tight`}>
+                                            {item.title}
+                                        </span>
+                                        <span className={`text-sm md:text-base font-bold ${theme.accentColor} opacity-60 group-hover:opacity-100 uppercase tracking-widest`}>
+                                            {item.organization}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* --- ACTIVE STATE (EXPANDED) --- */}
+                            <div className={`
+                                absolute inset-0 p-6 md:p-12 flex flex-col justify-between overflow-hidden
+                                transition-all duration-700
+                                ${isActive ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-10 pointer-events-none'}
+                            `}>
+                                {/* Background Giant Text Faded */}
+                                <div className="absolute -right-4 -top-10 text-[10rem] md:text-[15rem] font-black text-amber-500 opacity-[0.03] leading-none pointer-events-none select-none truncate max-w-full">
+                                    {item.dates.split(' ')[0]}
+                                </div>
+
+                                {/* Top Content */}
+                                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start gap-4">
+                                    <div>
+                                        <div className={`inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-amber-500/10 backdrop-blur-md border border-amber-500/20 ${theme.accentColor} font-bold text-xs uppercase tracking-widest`}>
+                                            <Calendar className="w-3 h-3" />
                                             {item.dates}
+                                        </div>
+
+                                        <h2 className="text-3xl md:text-5xl font-black text-white uppercase leading-[0.9] mb-3">
+                                            {item.title}
+                                        </h2>
+                                        <div className={`text-xl md:text-2xl font-bold ${theme.accentColor} flex items-center gap-3`}>
+                                            <Crown className="w-5 h-5" />
+                                            {item.organization}
                                         </div>
                                     </div>
 
-                                    {/* Content */}
-                                    <div className="flex-1 relative z-10 pl-2">
-                                        <h3 className="text-4xl font-black text-white mb-3 group-hover:text-yellow-300 transition-colors tracking-tight leading-none">
-                                            {item.title}
-                                        </h3>
-                                        <div className="text-xl text-gray-300 font-medium mb-8 flex items-center gap-3">
-                                            <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
-                                            {item.organization}
+                                    <div className="hidden md:block">
+                                        <div className={`w-14 h-14 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/20 ${theme.accentColor} group-hover:bg-amber-500/20 transition-colors`}>
+                                            <ArrowUpRight className="w-7 h-7" />
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <p className="text-gray-400 text-lg leading-relaxed mb-8 font-light italic border-l-2 border-white/10 pl-6">
+                                {/* Bottom Content */}
+                                <div className="relative z-10 grid md:grid-cols-[1.5fr_1fr] gap-12 items-end">
+                                    {/* Description */}
+                                    <div>
+                                        <p className="text-lg text-gray-300 font-light leading-relaxed mb-8 border-l-4 border-amber-500/20 pl-6">
                                             {item.description}
                                         </p>
 
-                                        {/* Details List */}
-                                        {item.details && (
-                                            <ul className="space-y-3 mb-6 border-t border-white/5 pt-6">
-                                                {item.details.map((detail, idx) => (
-                                                    <li key={idx} className="flex gap-3 text-sm text-gray-400">
-                                                        <span className="text-yellow-500/60 text-lg leading-none mt-0.5">❖</span>
-                                                        <span className="tracking-wide">{detail}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </div>
-
-                                    {/* Badge */}
-                                    <div className="mt-auto pt-4 flex items-center justify-end">
-                                        <div className="flex items-center gap-2 text-yellow-500/60 group-hover:text-yellow-400 transition-colors">
-                                            <CheckCircle className="w-5 h-5" />
-                                            <span className="text-xs uppercase tracking-widest font-bold">Verified Credential</span>
+                                        <div className="flex items-center gap-2 text-gray-500 font-mono text-sm">
+                                            <MapPin className="w-4 h-4 text-amber-500/50" />
+                                            <span>On-site</span>
                                         </div>
                                     </div>
 
+                                    {/* Tags/Details */}
+                                    <div>
+                                        {item.details && (
+                                            <div className="flex flex-wrap justify-end gap-2">
+                                                {item.details.map((detail, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className="px-4 py-2 bg-amber-900/10 hover:bg-amber-900/20 border border-amber-500/10 rounded-lg text-sm text-gray-300 transition-colors cursor-default"
+                                                    >
+                                                        {detail}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </GlassCard>
-                        </motion.div>
+                            </div>
+
+                            {/* Overlay Gradient for Depth */}
+                            <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent pointer-events-none ${isActive ? 'opacity-100' : 'opacity-0'}`}></div>
+                        </div>
                     );
                 })}
-            </motion.div>
-        </div >
+            </div>
+        </div>
     );
 };
 

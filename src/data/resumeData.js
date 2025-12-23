@@ -13,22 +13,47 @@ export const experience = [
             "Managed end-to-end post-production for over 100+ videos, ensuring consistent brand voice and visual quality.",
             "Mentored junior editors on pacing, color grading, and sound design techniques."
         ],
+        videos: [
+            {
+                title: "Sabki App Video 1",
+                file: "https://youtu.be/HEbx81C8flQ",
+                thumbnail: "https://img.youtube.com/vi/HEbx81C8flQ/maxresdefault.jpg",
+                type: "video"
+            },
+            {
+                title: "Sabki App Video 2",
+                file: "https://youtu.be/wfufLE7vrCU",
+                thumbnail: "https://img.youtube.com/vi/wfufLE7vrCU/maxresdefault.jpg",
+                type: "video"
+            },
+            {
+                title: "Sabki App Video 3",
+                file: "https://youtu.be/ENDEoYJi3Ds",
+                thumbnail: "https://img.youtube.com/vi/ENDEoYJi3Ds/maxresdefault.jpg",
+                type: "video"
+            },
+            {
+                title: "Sabki App Video 4",
+                file: "https://youtu.be/tLLAK_2ohv8",
+                thumbnail: "https://img.youtube.com/vi/tLLAK_2ohv8/maxresdefault.jpg",
+                type: "video"
+            }
+        ],
         meta: "2.5 Years"
     },
     {
         id: 'exp2',
-        title: "Social Media Manager",
+        title: "Video Editor",
         type: "card",
-        dates: "2018 – Present",
-        organization: "Unique Coaching Centre",
-        description: "Driving digital growth and omni-channel presence through strategic content creation and community management.",
+        dates: "1 Year",
+        organization: "Valleda Wellness Clinic",
+        description: "Edited simple short videos fulfilling client requirements for social media and internal use.",
         details: [
-            "Executed comprehensive social media strategies resulting in a 200% increase in student inquiries.",
-            "Produced and edited standardized educational content, maintaining high visual fidelity across platforms.",
-            "Troubleshot technical broadcasting issues during live sessions, ensuring 99.9% uptime.",
-            "Analyzed engagement metrics to optimize posting schedules and content formats."
+            "Edited short-form content for various social media platforms.",
+            "Collaborated with the team to deliver videos as per specific requirements.",
+            "Ensured timely delivery of daily video content."
         ],
-        meta: "5+ Years"
+        meta: "1 Year"
     },
     {
         id: 'exp3',
@@ -47,73 +72,62 @@ export const experience = [
 ];
 
 export const skills = [
-    // Video Editing
     {
-        id: 's1',
-        name: "Premiere Pro",
-        category: "Video",
-        level: "Expert",
-        icon: "https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg"
+        id: 0,
+        code: 'Pr',
+        name: 'PREMIERE PRO',
+        tagline: 'The Industry Standard',
+        desc: 'Expert timeline assembly, multicam editing, and seamless audio mixing for high-end production.',
+        color: 'bg-[#9999FF]',
+        bgGradient: 'from-[#2a2a5e] to-[#000]',
+        textColor: 'text-[#9999FF]',
+        // icon: handled in component
+        stats: [
+            { label: 'Speed', value: '100%' },
+            { label: 'Color', value: 'Pro' }
+        ]
     },
     {
-        id: 's3',
-        name: "After Effects",
-        category: "Video",
-        level: "Advanced",
-        icon: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg"
+        id: 1,
+        code: 'Ae',
+        name: 'AFTER EFFECTS',
+        tagline: 'Motion & Compositing',
+        desc: 'Advanced post-production VFX, 3D tracking, and cinematic motion graphics design.',
+        color: 'bg-[#D29BFB]',
+        bgGradient: 'from-[#382649] to-[#000]',
+        textColor: 'text-[#D29BFB]',
+        stats: [
+            { label: 'VFX', value: 'Adv' },
+            { label: '3D', value: 'Mid' }
+        ]
     },
     {
-        id: 's4',
-        name: "CapCut",
-        category: "Video",
-        level: "Expert",
-        icon: "https://static.cdnlogo.com/logos/c/9/capcut.svg"
-    },
-
-    // Design
-    {
-        id: 's5',
-        name: "Photoshop",
-        category: "Design",
-        level: "Advanced",
-        icon: "https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg"
+        id: 2,
+        code: 'Cap',
+        name: 'CAPCUT',
+        tagline: 'Viral Content Engine',
+        desc: 'Rapid workflow tailored for TikTok, Reels, and Shorts with trending effects and pacing.',
+        color: 'bg-white',
+        bgGradient: 'from-[#333] to-[#000]',
+        textColor: 'text-white',
+        stats: [
+            { label: 'Viral', value: 'High' },
+            { label: 'Ease', value: 'Max' }
+        ]
     },
     {
-        id: 's6',
-        name: "Illustrator",
-        category: "Design",
-        level: "Intermediate",
-        icon: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg"
-    },
-
-    // AI & Tech
-    {
-        id: 's8',
-        name: "ComfyUI",
-        category: "AI",
-        level: "Advanced",
-        icon: "https://avatars.githubusercontent.com/u/120610344?s=200&v=4"
-    },
-    {
-        id: 's9',
-        name: "Stable Diffusion",
-        category: "AI",
-        level: "Advanced",
-        icon: "https://avatars.githubusercontent.com/u/100950301?s=200&v=4" // Stability AI GitHub Avatar
-    },
-    {
-        id: 's10',
-        name: "Python",
-        category: "Tech",
-        level: "Basic",
-        icon: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"
-    },
-    {
-        id: 's11',
-        name: "React",
-        category: "Tech",
-        level: "Familiarity",
-        icon: "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+        id: 3,
+        code: 'Ps',
+        name: 'PHOTOSHOP',
+        tagline: 'Visual Architecture',
+        desc: 'Thumbnail creation, matte painting, and complex asset manipulation for video overlays.',
+        color: 'bg-[#31A8FF]',
+        bgGradient: 'from-[#0e2f47] to-[#000]',
+        textColor: 'text-[#31A8FF]',
+        stats: [
+            { label: 'Edit', value: 'Raw' },
+            { label: 'Art', value: 'Pro' }
+        ]
     }
 ];
 

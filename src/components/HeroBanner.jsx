@@ -3,8 +3,8 @@ import { Play, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const HeroBanner = () => {
-    // Using one of the Bihar videos as the hero background
-    const heroVideo = "https://portfoliovideosadarsh.blob.core.windows.net/videos/Clips/Bihar/Bihar%20Scene%202.mp4";
+    // Video Background
+    const videoSource = "/videos/Clips/Hero Banner.mp4";
 
     const variants = {
         hidden: { opacity: 0, y: 50 },
@@ -24,12 +24,12 @@ const HeroBanner = () => {
             {/* Background Video */}
             <div className="absolute inset-0 w-full h-full overflow-hidden">
                 <video
-                    src={heroVideo}
-                    className="w-full h-full object-cover"
+                    src={videoSource}
                     autoPlay
-                    muted
                     loop
+                    muted
                     playsInline
+                    className="w-full h-full object-cover object-bottom"
                 />
 
                 {/* Vignette & Gradient */}
@@ -41,7 +41,7 @@ const HeroBanner = () => {
             </div>
 
             {/* Content Info */}
-            <div className="absolute top-[30%] left-[4%] md:left-[60px] w-full md:w-1/3 z-10 text-white">
+            <div className="absolute top-[50%] left-[4%] md:left-[60px] w-full md:w-1/2 z-10 text-white">
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -49,8 +49,8 @@ const HeroBanner = () => {
                     variants={variants}
                 >
                     <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter drop-shadow-2xl">
-                        BIHAR
-                        <span className="block text-2xl md:text-3xl font-normal tracking-normal text-red-600">The Heritage</span>
+                        ADARSH THAKUR
+                        <span className="block text-2xl md:text-3xl font-normal tracking-normal text-red-600">Video Editor & Graphic Designer</span>
                     </h1>
                 </motion.div>
 
@@ -59,25 +59,12 @@ const HeroBanner = () => {
                     animate="visible"
                     custom={1}
                     variants={variants}
-                    className="text-base md:text-lg mb-8 drop-shadow-md text-gray-200 line-clamp-3"
+                    className="text-base md:text-lg mb-8 drop-shadow-md text-gray-200 line-clamp-3 md:line-clamp-none max-w-2xl"
                 >
-                    A journey through the ancient lands of Magadha, exploring the visual history of one of civilization's oldest cradles. Cinematic VFX compositing meets historical storytelling.
+                    Crafting visual stories through high-end video editing and cinematic VFX. A fusion of technical precision and artistic vision, bringing ideas to life with professional post-production and creative direction.
                 </motion.p>
 
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    custom={2}
-                    variants={variants}
-                    className="flex items-center gap-4"
-                >
-                    <button className="flex items-center gap-2 px-6 md:px-8 py-2 md:py-3 bg-white text-black rounded hover:bg-white/80 transition-colors font-bold text-lg">
-                        <Play fill="black" size={24} /> Play
-                    </button>
-                    <button className="flex items-center gap-2 px-6 md:px-8 py-2 md:py-3 bg-gray-500/70 text-white rounded hover:bg-gray-500/50 transition-colors font-bold text-lg backdrop-blur">
-                        <Info size={24} /> More Info
-                    </button>
-                </motion.div>
+
             </div>
         </div>
     );
