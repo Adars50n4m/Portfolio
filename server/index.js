@@ -12,6 +12,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const DEPLOYMENT_VERSION = '2025-12-24T19:15:00-Update-Experince-Education';
+
+console.log(`Starting Server... Version: ${DEPLOYMENT_VERSION}`);
+
+// Health Check Endpoint
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        version: DEPLOYMENT_VERSION,
+        environment: process.env.NODE_ENV,
+        mongo: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    });
+});
 
 // Middleware
 app.use(cors());
