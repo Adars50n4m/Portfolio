@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const DEPLOYMENT_VERSION = '2025-12-24T19:15:00-Update-Experince-Education';
+const DEPLOYMENT_VERSION = '2025-12-25T02:10:00-Mobile-Menu-Hotfix';
 
 console.log(`Starting Server... Version: ${DEPLOYMENT_VERSION}`);
 
