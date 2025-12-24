@@ -35,13 +35,15 @@ const HeroBanner = () => {
                 {/* Vignette & Gradient */}
                 {/* Left fade - subtle */}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-transparent to-transparent" />
-                {/* Bottom fade - pushed strictly to the bottom to keep video clear */}
-                <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#141414] via-[#141414]/80 to-transparent" />
+
+                {/* Mobile Scrim: Stronger, taller bottom gradient for text readability */}
+                <div className="absolute inset-x-0 bottom-0 h-[60vh] md:h-48 bg-gradient-to-t from-[#141414] via-[#141414]/90 to-transparent" />
+
                 <div className="absolute inset-x-0 bottom-0 h-12 bg-[#141414]" />
             </div>
 
             {/* Content Info */}
-            <div className="absolute top-[40%] md:top-[50%] left-0 w-full md:w-1/2 z-10 text-white px-6 md:px-0 md:pl-[60px]">
+            <div className="absolute bottom-12 left-6 md:bottom-auto md:top-[50%] md:left-[60px] w-full md:w-1/2 z-10 text-white pr-4 md:pr-0">
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -59,7 +61,7 @@ const HeroBanner = () => {
                     animate="visible"
                     custom={1}
                     variants={variants}
-                    className="text-base md:text-lg mb-8 drop-shadow-md text-gray-200 line-clamp-3 md:line-clamp-none max-w-2xl pr-4 md:pr-0"
+                    className="text-base md:text-lg mb-8 drop-shadow-md text-gray-200 line-clamp-3 md:line-clamp-none max-w-2xl"
                 >
                     Crafting visual stories through high-end video editing and cinematic VFX. A fusion of technical precision and artistic vision, bringing ideas to life with professional post-production and creative direction.
                 </motion.p>

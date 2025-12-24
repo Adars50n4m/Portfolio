@@ -134,7 +134,7 @@ export const skills = [
 export const education = [
     {
         id: 'edu1',
-        title: "Bachelor of Arts (B.A.)",
+        title: "Bachelor of Arts",
         type: "card",
         dates: "Graduated 2024",
         organization: "University of Delhi",
@@ -168,7 +168,7 @@ export const education = [
 export const contactInfo = {
     phone: "+91 8076536278",
     email: "work.adarshthakur@gmail.com",
-    secondaryEmail: "adarshark.as200@gmail.com",
+
     location: "New Delhi, India",
     role: "Senior Video Editor | Visual Storyteller",
     socials: {

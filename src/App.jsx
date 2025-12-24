@@ -180,20 +180,6 @@ const App = () => {
   // Video Categories
   const showVideos = showHome;
 
-  if (activeCategory === "Contact" && currentProfile) {
-    return (
-      <ErrorBoundary>
-        <div className="bg-[#141414] min-h-screen text-white font-sans">
-          <CustomCursor />
-          <NetflixNavbar profile={currentProfile} activeCategory={activeCategory} onSelectCategory={setActiveCategory} onLogout={() => setCurrentProfile(null)} />
-          <div className="pt-20">
-            <Contact />
-          </div>
-        </div>
-      </ErrorBoundary>
-    )
-  }
-
   return (
     <ErrorBoundary>
       <div className="bg-[#141414] min-h-screen text-white overflow-x-hidden overflow-y-scroll font-sans">
@@ -243,6 +229,14 @@ const App = () => {
                 {showEducation && (
                   <PageTransition key="education">
                     <EducationView education={education} onItemClick={handleItemClick} />
+                  </PageTransition>
+                )}
+
+                {showContact && (
+                  <PageTransition key="contact">
+                    <div className="pr-4 md:pr-12">
+                      <Contact />
+                    </div>
                   </PageTransition>
                 )}
               </AnimatePresence>
