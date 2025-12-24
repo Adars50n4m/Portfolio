@@ -13,6 +13,16 @@ const NetflixNavbar = ({ profile, activeCategory, onSelectCategory, onLogout }) 
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Prevent scrolling when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [isMobileMenuOpen]);
+
     const navItems = ['Home', 'Skills', 'Experience', 'Education', 'Contact'];
 
     return (
@@ -22,7 +32,7 @@ const NetflixNavbar = ({ profile, activeCategory, onSelectCategory, onLogout }) 
                 <div className="flex items-center gap-8">
                     {/* Logo */}
                     <div
-                        className="text-red-600 font-black text-2xl md:text-4xl tracking-tighter cursor-pointer scale-105 hover:scale-110 transition-transform"
+                        className="text-red-600 font-black text-2xl md:text-4xl tracking-tighter cursor-pointer scale-105 hover:scale-110 transition-transform z-50 relative"
                         onClick={onLogout}
                     >
                         ADARSH
@@ -43,12 +53,12 @@ const NetflixNavbar = ({ profile, activeCategory, onSelectCategory, onLogout }) 
                 </div>
 
                 {/* Right Actions */}
-                <div className="flex items-center gap-6 text-white">
+                <div className="flex items-center gap-6 text-white z-50 relative">
                     <Search className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors hidden sm:block" />
                     <p className="hidden md:block text-sm font-medium cursor-pointer">Children</p>
                     <Bell className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
 
-                    <div className="flex items-center gap-2 cursor-pointer group relative">
+                    <div className="hidden md:flex items-center gap-2 cursor-pointer group relative">
                         <div className="w-8 h-8 rounded overflow-hidden border border-transparent group-hover:border-white transition-all">
                             {profile?.img ? (
                                 <img src={profile.img} alt="Profile" className="w-full h-full object-cover" />
@@ -78,31 +88,40 @@ const NetflixNavbar = ({ profile, activeCategory, onSelectCategory, onLogout }) 
                         </div>
                     </div>
 
-                    <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                        {isMobileMenuOpen ? <X /> : <Menu />}
+                    <button className="md:hidden p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                        {isMobileMenuOpen ? <X className="w-8 h-8 text-white" /> : <Menu className="w-7 h-7" />}
                     </button>
                 </div>
             </div>
 
-            {/* Mobile Menu */}
-            {isMobileMenuOpen && (
-                <div className="md:hidden bg-black/95 absolute top-full w-full py-4 border-t border-gray-800 animate-in slide-in-from-top-5">
-                    <ul className="flex flex-col gap-4 px-4 text-center">
-                        {navItems.map((item) => (
-                            <li
-                                key={item}
-                                className={`text-sm cursor-pointer py-2 ${activeCategory === item ? 'text-white font-bold' : 'text-gray-300'}`}
-                                onClick={() => {
-                                    onSelectCategory(item);
-                                    setIsMobileMenuOpen(false);
-                                }}
-                            >
-                                {item}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            {/* Mobile Menu - Full Screen Glass Overlay */}
+            <div className={`fixed inset-0 bg-black/90 backdrop-blur-xl z-40 flex flex-col items-center justify-center transition-all duration-500 md:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <ul className="flex flex-col gap-8 text-center">
+                    {navItems.map((item, index) => (
+                        <li
+                            key={item}
+                            className={`text-3xl font-black cursor-pointer transition-all duration-300 transform ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} ${activeCategory === item ? 'text-red-500 scale-110' : 'text-gray-400 hover:text-white'}`}
+                            style={{ transitionDelay: `${index * 100}ms` }}
+                            onClick={() => {
+                                onSelectCategory(item);
+                                setIsMobileMenuOpen(false);
+                            }}
+                        >
+                            {item}
+                        </li>
+                    ))}
+
+                    <div className="w-12 h-1 bg-gray-800 rounded-full my-4 mx-auto" />
+
+                    <li
+                        className={`text-xl font-medium text-gray-500 cursor-pointer hover:text-white transition-all duration-300 transform ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+                        style={{ transitionDelay: '600ms' }}
+                        onClick={onLogout}
+                    >
+                        Sign Out
+                    </li>
+                </ul>
+            </div>
         </nav>
     );
 };
