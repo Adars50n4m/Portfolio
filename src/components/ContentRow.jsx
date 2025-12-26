@@ -88,7 +88,7 @@ const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick }) => {
     // Safe access for video properties
     // Safe access for video properties
     const isUrl = item.file && (item.file.startsWith('http') || item.file.startsWith('//'));
-    const videoPath = isUrl ? item.file : (isVideo && item.file && item.folder ? `/videos/Clips/${item.folder}/${item.file}` : '');
+    const videoPath = isUrl ? item.file : (isVideo && item.file && item.folder ? `/videos/Clips/${encodeURIComponent(item.folder)}/${encodeURIComponent(item.file)}` : '');
 
     const getTitle = (file) => {
         if (!file) return item.title;
