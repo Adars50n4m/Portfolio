@@ -104,6 +104,15 @@ const socialImpactVideos = [
   { file: "Slum.mp4", folder: "Slum", type: 'video' }
 ];
 
+// --- FEATURED PORTFOLIO LIST (Fixed for everyone) ---
+const recentWorkVideos = [
+  { file: "Bihar Scene 2.mp4", folder: "Bihar", type: 'video' },
+  { file: "Bengal Femine 3.mp4", folder: "Bihar", type: 'video' },
+  { file: "Lenin 1.mp4", folder: "Lenin Video", type: 'video' },
+  { file: "Nalanda Study 2_1.mp4", folder: "Bihar", type: 'video' },
+  { file: "Slum.mp4", folder: "Slum", type: 'video' }
+];
+
 
 const App = () => {
   const [currentProfile, setCurrentProfile] = useState(null);
@@ -215,7 +224,7 @@ const App = () => {
                 {/* --- VIDEO PROJECTS (Home Feed) --- */}
                 {(showVideos) && (
                   <PageTransition key="home-videos">
-                    <ContentRow title="Recent Work Clips" videos={myList} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
+                    <ContentRow title="Recent Work Clips" videos={recentWorkVideos} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="Ancient Heritage" videos={videoData.ancientBihar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="The British Raj Limited Series" videos={videoData.britishRaj} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="Revolutionary History" videos={videoData.russianRev} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
