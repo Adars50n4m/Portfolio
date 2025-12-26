@@ -25,6 +25,7 @@ import VideoPlayer from './components/ui/VideoPlayer';
 // ... (other video arrays) ...
 
 const bengalFamineVideos = [
+  { file: "Bihar Scene 2.mp4", folder: "Bihar", type: 'video' },
   { file: "Bengal Femine 3.mp4", folder: "Bihar", type: 'video' },
   { file: "Bengal famine 1.mp4", folder: "Bihar", type: 'video' },
   { file: "Bengal famine 2.mp4", folder: "Bihar", type: 'video' },
@@ -107,9 +108,19 @@ const socialImpactVideos = [
 const App = () => {
   const [currentProfile, setCurrentProfile] = useState(null);
   const [activeCategory, setActiveCategory] = useState("Home");
-  const [myList, setMyList] = useState([]);
+  // Initialize My List with persistence or default item
+  const [myList, setMyList] = useState(() => {
+    const saved = localStorage.getItem('myList');
+    if (saved) return JSON.parse(saved);
+    return [{ file: "Bihar Scene 2.mp4", folder: "Bihar", type: 'video' }];
+  });
   const [selectedItem, setSelectedItem] = useState(null);
   const [playingVideo, setPlayingVideo] = useState(null);
+
+  // Persist My List
+  useEffect(() => {
+    localStorage.setItem('myList', JSON.stringify(myList));
+  }, [myList]);
 
   // New State for Videos
   const [videoData, setVideoData] = useState({
@@ -182,7 +193,8 @@ const App = () => {
 
   return (
     <ErrorBoundary>
-      <div className="bg-[#141414] min-h-screen text-white overflow-x-hidden overflow-y-scroll font-sans">
+      <div className="min-h-screen text-white overflow-x-hidden overflow-y-scroll font-sans relative">
+        <LiquidBackground />
         <CustomCursor />
         {!currentProfile ? (
           <ProfileGate onSelectProfile={setCurrentProfile} />
@@ -203,7 +215,7 @@ const App = () => {
                 {/* --- VIDEO PROJECTS (Home Feed) --- */}
                 {(showVideos) && (
                   <PageTransition key="home-videos">
-                    <ContentRow title="Trending Now" videos={videoData.bengalFamine} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
+                    <ContentRow title="Recent Work Clips" videos={myList} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="Ancient Heritage" videos={videoData.ancientBihar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="The British Raj Limited Series" videos={videoData.britishRaj} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="Revolutionary History" videos={videoData.russianRev} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
@@ -242,7 +254,7 @@ const App = () => {
               </AnimatePresence>
 
               {/* Footer */}
-              <div className="mt-20 text-gray-500 text-sm text-center pb-8 border-t border-gray-800 pt-8 mr-4 md:mr-12">
+              <div className="mt-20 text-gray-500 text-sm text-center pb-8 pt-8 mr-4 md:mr-12">
                 <p>Designed by Adarsh Kumar</p>
                 <p className="mt-2 text-xs">Portfolio Demonstration</p>
               </div>

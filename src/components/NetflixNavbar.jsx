@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Bell, Menu, X, ChevronDown, User, Home, Zap, Briefcase, GraduationCap, Mail, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const NetflixNavbar = ({ activeCategory, onSelectCategory, profile }) => {
+const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -42,10 +42,10 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile }) => {
                 <div className="flex items-center gap-8">
                     {/* Logo */}
                     <div
-                        className="text-red-600 font-black text-2xl md:text-4xl tracking-tighter cursor-pointer scale-105 hover:scale-110 transition-transform z-50 relative"
-                        onClick={() => onSelectCategory('Home')}
+                        className="cursor-pointer scale-105 hover:scale-110 transition-transform z-50 relative"
+                        onClick={onLogout}
                     >
-                        ADARSH
+                        <img src="/logo-full.png" alt="ADARSH" className="h-8 md:h-12 object-contain" />
                     </div>
 
                     {/* Desktop Links */}
@@ -65,7 +65,6 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile }) => {
                 {/* Right Actions */}
                 <div className="flex items-center gap-4 md:gap-6 text-white z-50 relative">
                     <Search className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors hidden sm:block" />
-                    <p className="hidden md:block text-sm font-medium cursor-pointer">Children</p>
                     <Bell className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors hidden sm:block" />
 
                     {/* Desktop Profile Dropdown */}

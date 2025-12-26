@@ -45,7 +45,7 @@ export const experience = [
         id: 'exp2',
         title: "Video Editor",
         type: "card",
-        dates: "1 Year",
+        dates: "2022 - 2023",
         organization: "Valleda Wellness Clinic",
         description: "Edited simple short videos fulfilling client requirements for social media and internal use.",
         details: [
@@ -103,16 +103,16 @@ export const skills = [
     },
     {
         id: 2,
-        code: 'Cap',
-        name: 'CAPCUT',
-        tagline: 'Viral Content Engine',
-        desc: 'Rapid workflow tailored for TikTok, Reels, and Shorts with trending effects and pacing.',
-        color: 'bg-white',
-        bgGradient: 'from-[#333] to-[#000]',
-        textColor: 'text-white',
+        code: 'Ai',
+        name: 'ADOBE ILLUSTRATOR',
+        tagline: 'Vector Graphics',
+        desc: 'Precision vector design for logos, icons, and complex illustrations.',
+        color: 'bg-[#FF9A00]',
+        bgGradient: 'from-[#4e2a00] to-[#000]',
+        textColor: 'text-[#FF9A00]',
         stats: [
-            { label: 'Viral', value: 'High' },
-            { label: 'Ease', value: 'Max' }
+            { label: 'Vector', value: 'Pro' },
+            { label: 'Design', value: 'High' }
         ]
     },
     {

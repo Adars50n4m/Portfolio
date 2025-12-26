@@ -98,60 +98,62 @@ const Contact = () => {
                         {/* Divider */}
                         <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-                        {/* Socials & Phone */}
-                        <div className="grid grid-cols-1 gap-4">
-                            <div className="space-y-4">
-                                <h4 className="text-xs font-bold text-[#E50914] uppercase tracking-[0.2em] flex items-center gap-2">
-                                    <Phone size={14} /> Mobile
-                                </h4>
-                                <a href={`tel:${contactInfo.phone} `} className="block p-4 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group h-full">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <div className="text-lg md:text-xl font-bold text-white group-hover:text-green-400 transition-colors">
-                                                {contactInfo.phone}
-                                            </div>
-                                            <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1 group-hover:text-gray-400">
-                                                <span>Tap to Call</span>
-                                            </div>
+                        {/* Mobile Section */}
+                        <div className="space-y-4">
+                            <h4 className="text-xs font-bold text-[#E50914] uppercase tracking-[0.2em] flex items-center gap-2">
+                                <Phone size={14} /> Mobile
+                            </h4>
+                            <a href={`tel:${contactInfo.phone} `} className="block p-4 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group h-full">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <div className="text-lg md:text-xl font-bold text-white group-hover:text-green-400 transition-colors">
+                                            {contactInfo.phone}
                                         </div>
-                                        <div className="p-2 text-gray-400 group-hover:text-green-400 transition-colors">
-                                            <Phone size={20} />
+                                        <div className="text-[10px] text-gray-500 mt-1 flex items-center gap-1 group-hover:text-gray-400">
+                                            <span>Tap to Call</span>
                                         </div>
                                     </div>
-
-                                </a>
-                            </div>
-
-                            <div className="space-y-4">
-                                <h4 className="text-xs font-bold text-[#E50914] uppercase tracking-[0.2em] flex items-center gap-2">
-                                    Socials
-                                </h4>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <a
-                                        href={contactInfo.socials.instagram}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-4 rounded-lg border border-white/5 bg-gradient-to-br from-purple-900/10 to-pink-900/10 hover:from-purple-900/20 hover:to-pink-900/20 transition-all flex items-center justify-center gap-3 group"
-                                    >
-                                        <Instagram size={24} className="text-pink-500 group-hover:scale-110 transition-transform" />
-                                        <span className="text-sm font-medium text-gray-300 group-hover:text-white">Instagram</span>
-                                    </a>
-                                    <a
-                                        href={contactInfo.socials.youtube}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-4 rounded-lg border border-white/5 bg-gradient-to-br from-red-900/10 to-orange-900/10 hover:from-red-900/20 hover:to-orange-900/20 transition-all flex items-center justify-center gap-3 group"
-                                    >
-                                        <Youtube size={24} className="text-red-500 group-hover:scale-110 transition-transform" />
-                                        <span className="text-sm font-medium text-gray-300 group-hover:text-white">YouTube</span>
-                                    </a>
+                                    <div className="p-2 text-gray-400 group-hover:text-green-400 transition-colors">
+                                        <Phone size={20} />
+                                    </div>
                                 </div>
+
+                            </a>
+                        </div>
+
+                        {/* Divider */}
+                        <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+                        {/* Socials Section */}
+                        <div className="space-y-4">
+                            <h4 className="text-xs font-bold text-[#E50914] uppercase tracking-[0.2em] flex items-center gap-2">
+                                Socials
+                            </h4>
+                            <div className="grid grid-cols-2 gap-4">
+                                <a
+                                    href={contactInfo.socials.instagram}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-4 rounded-lg border border-white/5 bg-gradient-to-br from-purple-900/10 to-pink-900/10 hover:from-purple-900/20 hover:to-pink-900/20 transition-all flex items-center justify-center gap-3 group"
+                                >
+                                    <Instagram size={24} className="text-pink-500 group-hover:scale-110 transition-transform" />
+                                    <span className="text-sm font-medium text-gray-300 group-hover:text-white">Instagram</span>
+                                </a>
+                                <a
+                                    href={contactInfo.socials.youtube}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-4 rounded-lg border border-white/5 bg-gradient-to-br from-red-900/10 to-orange-900/10 hover:from-red-900/20 hover:to-orange-900/20 transition-all flex items-center justify-center gap-3 group"
+                                >
+                                    <Youtube size={24} className="text-red-500 group-hover:scale-110 transition-transform" />
+                                    <span className="text-sm font-medium text-gray-300 group-hover:text-white">YouTube</span>
+                                </a>
                             </div>
                         </div>
                     </div>
-                </div>
-            </motion.div>
-        </div>
+                </div >
+            </motion.div >
+        </div >
     );
 };
 

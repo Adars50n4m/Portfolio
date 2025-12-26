@@ -22,25 +22,28 @@ const HeroBanner = () => {
     return (
         <div className="relative w-full h-[85vh] md:h-[80vh]">
             {/* Background Video */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden">
+            {/* Background Video with Gradient Mask */}
+            <div className="absolute inset-0 w-full h-full overflow-hidden mask-gradient-bottom">
                 <video
                     src={videoSource}
                     autoPlay
                     loop
                     muted
                     playsInline
-                    className="w-full h-full object-cover object-bottom"
+                    className="w-full h-full object-cover object-bottom opacity-50"
                 />
 
-                {/* Vignette & Gradient */}
-                {/* Left fade - subtle */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-transparent to-transparent" />
-
-                {/* Mobile Scrim: Stronger, taller bottom gradient for text readability */}
-                <div className="absolute inset-x-0 bottom-0 h-[60vh] md:h-48 bg-gradient-to-t from-[#141414] via-[#141414]/90 to-transparent" />
-
-                <div className="absolute inset-x-0 bottom-0 h-12 bg-[#141414]" />
+                {/* Vignette Overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-transparent opacity-90" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-transparent to-transparent opacity-80" />
             </div>
+
+            <style jsx>{`
+                .mask-gradient-bottom {
+                    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+                    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+                }
+            `}</style>
 
             {/* Content Info */}
             <div className="absolute bottom-12 left-6 md:bottom-auto md:top-[50%] md:left-[60px] w-full md:w-1/2 z-10 text-white pr-4 md:pr-0">

@@ -6,24 +6,24 @@ import { MapPin, Briefcase, Calendar, ArrowUpRight } from 'lucide-react';
 const THEMES = [
     {
         id: 'theme-1',
-        bgGradient: 'from-neutral-900 via-stone-900 to-black',
-        accentColor: 'text-white',
-        borderColor: 'border-white/10',
-        glow: 'shadow-[0_0_30px_rgba(255,255,255,0.05)]'
+        bgGradient: 'from-indigo-900/20 via-purple-900/10 to-black',
+        accentColor: 'text-indigo-400',
+        borderColor: 'border-indigo-500/10',
+        glow: 'shadow-[0_0_30px_rgba(99,102,241,0.1)]'
     },
     {
         id: 'theme-2',
-        bgGradient: 'from-slate-900 via-gray-900 to-black',
-        accentColor: 'text-gray-200',
-        borderColor: 'border-white/10',
-        glow: 'shadow-[0_0_30px_rgba(255,255,255,0.05)]'
+        bgGradient: 'from-emerald-900/20 via-teal-900/10 to-black',
+        accentColor: 'text-emerald-400',
+        borderColor: 'border-emerald-500/10',
+        glow: 'shadow-[0_0_30px_rgba(16,185,129,0.1)]'
     },
     {
         id: 'theme-3',
-        bgGradient: 'from-zinc-900 via-neutral-900 to-black',
-        accentColor: 'text-white',
-        borderColor: 'border-white/10',
-        glow: 'shadow-[0_0_30px_rgba(255,255,255,0.05)]'
+        bgGradient: 'from-rose-900/20 via-pink-900/10 to-black',
+        accentColor: 'text-rose-400',
+        borderColor: 'border-rose-500/10',
+        glow: 'shadow-[0_0_30px_rgba(244,63,94,0.1)]'
     }
 ];
 
@@ -63,29 +63,61 @@ const ExperienceView = ({ experience = [] }) => {
                             onClick={() => setActiveId(isActive ? null : item.id)}
                             className={`
                                 relative rounded-2xl overflow-hidden cursor-pointer
-                                transform-gpu transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
+                                transform-gpu transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
                                 ${flexClass}
-                                bg-gradient-to-br ${theme.bgGradient}
-                                border border-white/5 hover:border-white/20
+                                ${isActive ? `bg-gradient-to-br ${theme.bgGradient} shadow-2xl` : 'bg-white/5 backdrop-blur-3xl backdrop-saturate-150'}
+                                border ${isActive ? 'border-white/20' : 'border-white/5 hover:border-white/10'}
                                 ${isActive ? theme.borderColor : ''}
-                                ${!isActive ? 'hover:scale-[1.01]' : ''}
+                                ${!isActive ? 'hover:scale-[1.01] shadow-[0_4px_30px_rgba(0,0,0,0.1)] group' : ''}
                             `}
                         >
+
+
                             {/* --- INACTIVE STATE (COLLAPSED) --- */}
                             {!isActive && (
-                                <div className="absolute inset-0 flex items-center px-8 md:px-16 justify-center group">
-                                    {/* Center: Company Name */}
-                                    <div className="flex flex-col items-center gap-2">
-                                        <span className={`text-2xl md:text-5xl font-black text-white/40 group-hover:text-white transition-colors uppercase tracking-tight text-center`}>
-                                            {item.organization}
-                                        </span>
-                                        <div className="w-8 h-1 bg-white/10 group-hover:bg-white/30 rounded-full transition-colors" />
+                                <div className="absolute inset-0 flex items-center justify-center group overflow-hidden">
+                                    {/* Color Reveal Overlay */}
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${theme.bgGradient} opacity-0 group-hover:opacity-80 transition-opacity duration-500`} />
+
+                                    {/* Giant Year Watermark */}
+                                    <div className="absolute -right-4 -bottom-8 text-[8rem] font-black text-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 select-none pointer-events-none">
+                                        {item.dates.split(' ')[0]}
+                                    </div>
+
+
+                                    {/* Center Content */}
+                                    <div className="flex flex-col items-center gap-4 relative z-10 px-4 text-center">
+                                        <div className="flex flex-col items-center gap-2">
+                                            <motion.span
+                                                layoutId={`org-${item.id}`}
+                                                className={`text-3xl md:text-5xl font-black text-white/50 group-hover:text-white transition-colors duration-300 uppercase tracking-tight`}
+                                                transition={{ type: "spring", stiffness: 60, damping: 20 }}
+                                            >
+                                                {item.organization}
+                                            </motion.span>
+                                            <div className="h-[2px] w-12 bg-white/20 group-hover:w-24 group-hover:bg-white/50 transition-all duration-500 rounded-full" />
+                                        </div>
+                                        {/* Tagline/Role Display - only shows on hover or always subtle */}
+                                        <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                                            <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-medium text-gray-300 border border-white/10 uppercase tracking-widest">
+                                                {item.title}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Gradient noise/sheen */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+
+                                    {/* Hover Shine Effect */}
+                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                        <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:animate-[shine_1s_ease-in-out]" />
                                     </div>
                                 </div>
-                            )}
+                            )
+                            }
 
                             {/* --- ACTIVE STATE (EXPANDED) --- */}
-                            <div className={`
+                            < div className={`
                                 absolute inset-0 p-6 md:p-12 flex flex-col justify-between overflow-hidden
                                 transition-all duration-700
                                 ${isActive ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-10 pointer-events-none'}
@@ -103,9 +135,17 @@ const ExperienceView = ({ experience = [] }) => {
                                             {item.dates}
                                         </div>
 
-                                        <h2 className="text-4xl md:text-6xl font-black text-white uppercase leading-[0.9] mb-2">
-                                            {item.organization}
-                                        </h2>
+                                        {isActive && (
+                                            <motion.h2
+                                                layoutId={`org-${item.id}`}
+                                                className="text-4xl md:text-6xl font-black text-white uppercase leading-[0.9] mb-2"
+                                                transition={{ type: "spring", stiffness: 60, damping: 20 }}
+                                            >
+                                                {item.organization}
+                                            </motion.h2>
+                                        )}
+
+                                        {/* REMOVED TITLE FROM HERE */}
                                         <div className={`text-2xl md:text-3xl font-bold text-gray-400 flex items-center gap-3`}>
                                             <Briefcase className="w-6 h-6" />
                                             {item.title}
@@ -156,8 +196,8 @@ const ExperienceView = ({ experience = [] }) => {
                         </div>
                     );
                 })}
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

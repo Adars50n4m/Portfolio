@@ -19,12 +19,11 @@ const Icons = {
         </svg>
     ),
 
-    // CapCut (Stylized C shape)
-    Cap: () => (
-        <svg viewBox="0 0 100 100" className="w-full h-full" fill="currentColor">
-            {/* Simplified CapCut Shape */}
-            <path d="M30 20 C 10 20, 10 50, 30 50 L 70 50 L 70 40 L 30 40 C 20 40, 20 30, 30 30 L 80 30 L 80 20 Z" />
-            <path d="M70 80 C 90 80, 90 50, 70 50 L 30 50 L 30 60 L 70 60 C 80 60, 80 70, 70 70 L 20 70 L 20 80 Z" />
+    // Adobe Illustrator (Ai)
+    Ai: () => (
+        <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+            <rect x="5" y="5" width="90" height="90" rx="20" stroke="currentColor" strokeWidth="6" fill="currentColor" fillOpacity="0.1" />
+            <text x="50" y="60" textAnchor="middle" fill="currentColor" fontSize="45" fontFamily="Arial, sans-serif" fontWeight="900" letterSpacing="-2">Ai</text>
         </svg>
     ),
 
@@ -64,18 +63,41 @@ const SkillsView = ({ skills = [] }) => {
                         onClick={() => setActiveId(isActive ? null : skill.id)}
                         className={`
                             relative rounded-2xl overflow-hidden cursor-pointer
-                            transform-gpu transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
+                            transform-gpu transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
                             ${flexClass}
-                            bg-gradient-to-br ${skill.bgGradient}
-                            border border-white/10
-                            ${!isActive ? 'hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]' : ''}
+                            ${isActive ? `bg-gradient-to-br ${skill.bgGradient} shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]` : 'bg-white/5 backdrop-blur-3xl backdrop-saturate-150'}
+                            border ${isActive ? 'border-white/20' : 'border-white/5 hover:border-white/10'}
+                            ${!isActive ? 'hover:scale-[1.02] hover:bg-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)] group' : ''}
                         `}
                     >
                         {/* --- INACTIVE STATE (COLLAPSED) --- */}
                         {!isActive && (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center h-full">
-                                <div className={`text-2xl md:text-5xl font-bold font-display tracking-widest uppercase vertical-text text-white/20 group-hover:text-white/50 transition-colors duration-300`}>
-                                    {skill.name}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center h-full overflow-hidden">
+                                {/* Color Reveal Overlay */}
+                                <div className={`absolute inset-0 bg-gradient-to-br ${skill.bgGradient} opacity-0 group-hover:opacity-80 transition-opacity duration-500`} />
+
+                                {/* Subtle Background Icon */}
+                                <div className={`absolute -right-6 -bottom-6 w-32 h-32 ${skill.textColor} opacity-10 rotate-12 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-0`}>
+                                    <IconComponent />
+                                </div>
+
+                                {/* Text Container - MORPHING SOURCE */}
+                                <div className="relative z-10 h-full flex flex-col items-center justify-center gap-4">
+                                    <motion.h2
+                                        layoutId={`title-${skill.id}`}
+                                        className={`text-2xl md:text-5xl font-bold font-display tracking-widest uppercase vertical-text text-white/40 group-hover:text-white drop-shadow-lg`}
+                                        transition={{ type: "spring", stiffness: 60, damping: 20 }}
+                                    >
+                                        {skill.name}
+                                    </motion.h2>
+                                </div>
+
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none"></div>
+
+                                {/* Hover Shine Effect */}
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                    <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:animate-[shine_1s_ease-in-out]" />
                                 </div>
                             </div>
                         )}
@@ -89,16 +111,21 @@ const SkillsView = ({ skills = [] }) => {
 
                             {/* Top Section */}
                             <div className="flex justify-between items-start relative z-20">
-                                <div>
-                                    <div className={`inline-block px-3 py-1 mb-4 text-[10px] md:text-xs font-bold tracking-widest text-black uppercase ${skill.color} rounded-sm`}>
-                                        {skill.tagline}
-                                    </div>
-                                    <h1 className="text-4xl md:text-8xl font-display text-white uppercase leading-[0.9]">
+                                <div className={`inline-block px-3 py-1 mb-4 text-[10px] md:text-xs font-bold tracking-widest text-black uppercase ${skill.color} rounded-sm`}>
+                                    {skill.tagline}
+                                </div>
+                                {isActive && (
+                                    <motion.h1
+                                        layoutId={`title-${skill.id}`}
+                                        className="text-4xl md:text-8xl font-display text-white uppercase leading-[0.9]"
+                                        transition={{ type: "spring", stiffness: 60, damping: 20 }}
+                                    >
                                         {skill.name.split(' ').map((word, i) => (
                                             <span key={i} className="block">{word}</span>
                                         ))}
-                                    </h1>
-                                </div>
+                                    </motion.h1>
+                                )}
+
 
                                 {/* Background Giant Icon Faded */}
                                 <div className={`absolute -right-10 -top-10 w-[200px] h-[200px] md:w-[500px] md:h-[500px] ${skill.textColor} opacity-5 pointer-events-none`}>

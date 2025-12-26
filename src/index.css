@@ -119,3 +119,19 @@ body {
 .glitch-hover:hover {
   animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
 }
+
+@keyframes shine {
+  from {
+    left: -100%;
+    opacity: 0;
+  }
+
+  to {
+    left: 100%;
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}

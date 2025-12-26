@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 import { GraduationCap, Award, MapPin, ArrowUpRight, Crown, Calendar } from 'lucide-react';
 
@@ -57,28 +58,64 @@ const EducationView = ({ education = [] }) => {
                             onClick={() => setActiveId(isActive ? null : item.id)}
                             className={`
                                 relative rounded-2xl overflow-hidden cursor-pointer
-                                transform-gpu transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
+                                transform-gpu transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] 
                                 ${flexClass}
-                                bg-gradient-to-br ${theme.bgGradient}
-                                border border-white/5 hover:border-amber-500/30
+                                ${isActive ? `bg-gradient-to-br ${theme.bgGradient} shadow-[0_0_40px_-5px_rgba(245,158,11,0.2)]` : 'bg-white/5 backdrop-blur-3xl backdrop-saturate-150'}
+                                border ${isActive ? 'border-amber-500/30' : 'border-white/5 hover:border-amber-500/30'}
                                 ${isActive ? theme.borderColor : ''}
-                                ${!isActive ? `hover:scale-[1.01] hover:${theme.glow}` : ''}
+                                ${!isActive ? `hover:scale-[1.01] hover:${theme.glow} shadow-[0_4px_30px_rgba(0,0,0,0.1)] group` : ''}
                             `}
                         >
+
+
                             {/* --- INACTIVE STATE (COLLAPSED) --- */}
                             {!isActive && (
-                                <div className="absolute inset-0 flex items-center px-8 md:px-16 justify-center group">
-                                    {/* Center: Degree Name */}
-                                    <div className="flex flex-col items-center gap-3 text-center">
-                                        <div className={`p-3 rounded-full bg-amber-500/10 border border-amber-500/20 ${theme.accentColor} mb-2 group-hover:scale-110 transition-transform`}>
-                                            {isDegree ? <GraduationCap className="w-6 h-6" /> : <Award className="w-6 h-6" />}
+                                <div className="absolute inset-0 flex items-center justify-center group overflow-hidden">
+                                    {/* Color Reveal Overlay */}
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${theme.bgGradient} opacity-0 group-hover:opacity-80 transition-opacity duration-500`} />
+
+                                    {/* Giant Watermark Icon */}
+                                    <div className={`absolute -right-8 -bottom-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500 scale-150 rotate-12 ${theme.accentColor}`}>
+                                        {isDegree ? <GraduationCap size={200} /> : <Award size={200} />}
+                                    </div>
+
+                                    <div className="flex flex-col items-center gap-2 text-center relative z-10">
+                                        {/* Icon Badge */}
+                                        <div className={`
+                                            p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm 
+                                            ${theme.accentColor} mb-2 group-hover:scale-110 group-hover:bg-amber-500/20 transition-all duration-500 shadow-xl mt-5
+                                        `}>
+                                            {isDegree ? <GraduationCap className="w-8 h-8" /> : <Award className="w-8 h-8" />}
                                         </div>
-                                        <span className={`text-xl md:text-4xl font-black text-white/50 group-hover:text-white transition-colors uppercase tracking-tight`}>
+
+                                        {/* Degree Title */}
+                                        <motion.span
+                                            layoutId={`degree-${item.id}`}
+                                            className={`text-2xl md:text-5xl font-black text-white/50 group-hover:text-white transition-colors duration-300 uppercase tracking-tight`}
+                                            transition={{ type: "spring", stiffness: 60, damping: 20 }}
+                                        >
                                             {item.title}
-                                        </span>
-                                        <span className={`text-sm md:text-base font-bold ${theme.accentColor} opacity-60 group-hover:opacity-100 uppercase tracking-widest`}>
-                                            {item.organization}
-                                        </span>
+                                        </motion.span>
+
+
+
+                                        {/* Organization & Year - Hidden by default, reveals on hover */}
+                                        <div className="flex flex-col items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <span className={`text-sm md:text-base font-bold ${theme.accentColor} uppercase tracking-widest`}>
+                                                {item.organization}
+                                            </span>
+                                            <span className="text-xs text-gray-500 font-mono">
+                                                Class of {item.dates.split(' ').pop()}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Gradient Shine */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/0 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+                                    {/* Hover Shine Effect */}
+                                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                        <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:animate-[shine_1s_ease-in-out]" />
                                     </div>
                                 </div>
                             )}
@@ -102,9 +139,17 @@ const EducationView = ({ education = [] }) => {
                                             {item.dates}
                                         </div>
 
-                                        <h2 className="text-3xl md:text-5xl font-black text-white uppercase leading-[0.9] mb-3">
-                                            {item.title}
-                                        </h2>
+                                        {isActive && (
+                                            <motion.h2
+                                                layoutId={`degree-${item.id}`}
+                                                className="text-3xl md:text-5xl font-black text-white uppercase leading-[0.9] mb-3"
+                                                transition={{ type: "spring", stiffness: 60, damping: 20 }}
+                                            >
+                                                {item.title}
+                                            </motion.h2>
+                                        )}
+
+
                                         <div className={`text-xl md:text-2xl font-bold ${theme.accentColor} flex items-center gap-3`}>
                                             <Crown className="w-5 h-5" />
                                             {item.organization}
