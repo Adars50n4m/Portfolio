@@ -12,8 +12,8 @@ dist
 dist-ssr
 *.local
 .env
-*.mp4
-!public/videos/Clips/Hero Banner.mp4
+!public/videos/**/*.mp4
+public/videos/Clips/Bihar/Bihar Scene 1 Linked Comp 01_2.mp4
 
 # Editor directories and files
 .vscode/*
