@@ -224,6 +224,11 @@ const App = () => {
                 {/* --- VIDEO PROJECTS (Home Feed) --- */}
                 {(showVideos) && (
                   <PageTransition key="home-videos">
+                    {/* --- MY LIST (Conditional) --- */}
+                    {myList.length > 0 && (
+                      <ContentRow title="My List" videos={myList} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
+                    )}
+
                     <ContentRow title="Recent Work Clips" videos={recentWorkVideos} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="Ancient Heritage" videos={videoData.ancientBihar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
                     <ContentRow title="The British Raj Limited Series" videos={videoData.britishRaj} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
