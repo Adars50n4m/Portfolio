@@ -5,7 +5,7 @@ import NetflixNavbar from './components/NetflixNavbar';
 import HeroBanner from './components/HeroBanner';
 import ContentRow from './components/ContentRow';
 import DetailModal from './components/DetailModal';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import PageTransition from './components/ui/PageTransition';
 import Contact from './components/Contact';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -14,6 +14,7 @@ import ExperienceView from './components/sections/ExperienceView';
 import EducationView from './components/sections/EducationView';
 import LiquidBackground from './components/ui/LiquidBackground';
 import CustomCursor from './components/ui/CustomCursor';
+// import ZoomTransition from './components/ui/ZoomTransition'; // Removed as per user request
 
 // --- DATA IMPORT ---
 import { skills, experience, education, contactInfo } from './data/resumeData';
@@ -200,102 +201,131 @@ const App = () => {
   // Video Categories
   const showVideos = showHome;
 
+  // Add videoVersion state for cache busting
+  const [videoVersion, setVideoVersion] = useState(Date.now());
+
+  // Scroll to top on profile change to ensure morph alignment
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentProfile]);
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen text-white overflow-x-hidden overflow-y-scroll font-sans relative">
         <LiquidBackground />
         <CustomCursor />
-        {!currentProfile ? (
-          <ProfileGate onSelectProfile={setCurrentProfile} />
-        ) : (
-          <>
-            <NetflixNavbar
-              profile={currentProfile}
-              activeCategory={activeCategory}
-              onSelectCategory={setActiveCategory}
-              onLogout={() => setCurrentProfile(null)}
-            />
-
-            {showHome && <HeroBanner />}
-
-            <div className={`relative z-20 pb-20 pl-4 md:pl-12 ${showHome ? '-mt-12 md:-mt-28' : 'mt-24'}`}>
-
-              <AnimatePresence mode="wait">
-                {/* --- VIDEO PROJECTS (Home Feed) --- */}
-                {(showVideos) && (
-                  <PageTransition key="home-videos">
-                    {/* --- MY LIST (Conditional) --- */}
-                    {myList.length > 0 && (
-                      <ContentRow title="My List" videos={myList} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                    )}
-
-                    <ContentRow title="Recent Work Clips" videos={recentWorkVideos} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                    <ContentRow title="Ancient Heritage" videos={videoData.ancientBihar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                    <ContentRow title="The British Raj Limited Series" videos={videoData.britishRaj} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                    <ContentRow title="Revolutionary History" videos={videoData.russianRev} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                    <ContentRow title="Economics & War" videos={videoData.financeWar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                    <ContentRow title="Maps & Graphics" videos={videoData.mapsMotion} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                    <ContentRow title="Social Documentaries" videos={videoData.socialImpact} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} />
-                  </PageTransition>
-                )}
-
-                {/* --- RESUME SECTIONS (Dedicated Pages) --- */}
-                {showSkills && (
-                  <PageTransition key="skills">
-                    <SkillsView skills={skills} />
-                  </PageTransition>
-                )}
-
-                {showExperience && (
-                  <PageTransition key="experience">
-                    <ExperienceView experience={experience} onItemClick={handleItemClick} />
-                  </PageTransition>
-                )}
-
-                {showEducation && (
-                  <PageTransition key="education">
-                    <EducationView education={education} onItemClick={handleItemClick} />
-                  </PageTransition>
-                )}
-
-                {showContact && (
-                  <PageTransition key="contact">
-                    <div className="pr-4 md:pr-12">
-                      <Contact />
-                    </div>
-                  </PageTransition>
-                )}
-              </AnimatePresence>
-
-              {/* Footer */}
-              <div className="mt-20 text-gray-500 text-sm text-center pb-8 pt-8 mr-4 md:mr-12">
-                <p>Designed by Adarsh Kumar</p>
-                <p className="mt-2 text-xs">Portfolio Demonstration</p>
-              </div>
-            </div>
-
-            {/* Modal for Details */}
-            <DetailModal
-              item={selectedItem}
-              onClose={closeDetailModal}
-              onPlay={(video) => setPlayingVideo(video)}
-              onToggleList={toggleList}
-              isAdded={selectedItem && myList.some(v => v.file === selectedItem.file)}
-            />
-
-            {/* Full Screen Video Player Overlay */}
-            <AnimatePresence>
-              {playingVideo && (
-                <VideoPlayer
-                  video={playingVideo}
-                  onClose={() => setPlayingVideo(null)}
+        <LayoutGroup>
+          <AnimatePresence mode="popLayout">
+            {!currentProfile ? (
+              <ProfileGate key="profile-gate" onSelectProfile={setCurrentProfile} />
+            ) : (
+              <motion.div
+                exit={{ opacity: 0, transition: { duration: 1.2, ease: "easeInOut" } }} // Slow Fade out Home to reveal Gate
+              >
+                <NetflixNavbar
+                  profile={currentProfile}
+                  activeCategory={activeCategory}
+                  onSelectCategory={setActiveCategory}
+                  onLogout={() => setCurrentProfile(null)}
                 />
-              )}
-            </AnimatePresence>
-          </>
-        )}
+
+                {/* ZoomTransition Removed - Content just fades in behind the morphing avatar */}
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+                >
+
+                  {showHome && <HeroBanner />}
+
+                  <div className={`relative z-20 pb-20 pl-4 md:pl-12 ${showHome ? '-mt-12 md:-mt-28' : 'mt-24'}`}>
+
+                    <AnimatePresence mode="wait">
+                      {/* --- VIDEO PROJECTS (Home Feed) --- */}
+                      {(showVideos) && (
+                        <PageTransition key="home-videos">
+                          {/* --- MY LIST (Conditional) --- */}
+                          {myList.length > 0 && (
+                            <ContentRow title="My List" videos={myList} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} numbered={true} />
+                          )}
+
+                          {/* --- VIDEO CATEGORIES --- */}
+
+
+                          <ContentRow title="Ancient Heritage" videos={videoData.ancientBihar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
+                          <ContentRow title="The British Raj Limited Series" videos={videoData.britishRaj} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
+                          <ContentRow title="Revolutionary History" videos={videoData.russianRev} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
+                          <ContentRow title="Economics & War" videos={videoData.financeWar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
+                          <ContentRow title="Maps & Graphics" videos={videoData.mapsMotion} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
+                          <ContentRow title="Social Documentaries" videos={videoData.socialImpact} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
+                        </PageTransition>
+                      )}
+
+                      {/* --- RESUME SECTIONS (Dedicated Pages) --- */}
+                      {showSkills && (
+                        <PageTransition key="skills">
+                          <SkillsView skills={skills} />
+                        </PageTransition>
+                      )}
+
+                      {showExperience && (
+                        <PageTransition key="experience">
+                          <ExperienceView experience={experience} onItemClick={handleItemClick} />
+                        </PageTransition>
+                      )}
+
+                      {showEducation && (
+                        <PageTransition key="education">
+                          <EducationView education={education} onItemClick={handleItemClick} />
+                        </PageTransition>
+                      )}
+
+                      {showContact && (
+                        <PageTransition key="contact">
+                          <div className="pr-4 md:pr-12">
+                            <Contact />
+                          </div>
+                        </PageTransition>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Footer */}
+                    <div className="mt-20 text-gray-500 text-sm text-center pb-8 pt-8 mr-4 md:mr-12">
+                      <p>Designed by Adarsh Kumar</p>
+                      <p className="mt-2 text-xs">Portfolio Demonstration</p>
+                    </div>
+                  </div>
+
+                  {/* Modal for Details */}
+                  <DetailModal
+                    item={selectedItem}
+                    onClose={closeDetailModal}
+                    onPlay={(video) => setPlayingVideo(video)}
+                    onToggleList={toggleList}
+                    isAdded={selectedItem && myList.some(v => v.file === selectedItem.file)}
+                  />
+
+                  {/* Full Screen Video Player Overlay */}
+                  <AnimatePresence>
+                    {playingVideo && (
+                      <VideoPlayer
+                        video={playingVideo}
+                        onClose={() => {
+                          setPlayingVideo(null);
+                          setVideoVersion(Date.now()); // Force refresh versions on close
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+                {/* </ZoomTransition> */}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </LayoutGroup>
       </div>
-    </ErrorBoundary>
+    </ErrorBoundary >
   );
 };
 

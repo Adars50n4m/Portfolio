@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Play, Plus, ThumbsUp, ChevronDown, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ContentRow = ({ title, videos = [], myList = [], onToggleList, onItemClick }) => {
+const ContentRow = ({ title, videos = [], myList = [], onToggleList, onItemClick, videoVersion, numbered = false }) => {
     const rowRef = useRef(null);
     const [isMoved, setIsMoved] = useState(false);
 
@@ -28,11 +28,6 @@ const ContentRow = ({ title, videos = [], myList = [], onToggleList, onItemClick
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="relative z-30 hover:z-50 transition-all duration-300 overflow-visible my-4 -mb-20 md:-mb-32 pointer-events-none"
         >
-            {/* Title needs pointer-events-auto because parent is none (to allow clicking through the gap) 
-                Wait, if I set pointer-events-none on wrapper, scrollbar might break. 
-                Better strategy: Just use z-index and spacing. 
-            */}
-
             <h2 className="text-[#e5e5e5] font-bold text-lg md:text-2xl mb-2 px-4 md:px-12 hover:text-white transition-colors cursor-pointer inline-block pointer-events-auto">
                 {title}
             </h2>
@@ -47,15 +42,51 @@ const ContentRow = ({ title, videos = [], myList = [], onToggleList, onItemClick
                 </div>
 
                 {/* Scroll User Container */}
-                {/* Added significant padding to accommodate scale 1.3 + drop down info */}
                 <div
                     ref={rowRef}
                     className="flex gap-2 overflow-x-scroll scrollbar-hide px-4 md:px-12 scroll-smooth items-center pt-8 md:pt-10 pb-24 md:pb-40"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {videos.map((vidData, i) => {
-                        // Check if this video is in my list
                         const isAdded = myList.some(v => v.file === vidData.file);
+
+                        if (numbered) {
+                            return (
+                                <div key={i} className="flex-none flex items-center relative group/number-card" style={{ width: 'auto', marginRight: '20px' }}>
+                                    {/* Large SVG Number */}
+                                    <svg
+                                        viewBox="0 0 180 157"
+                                        className="h-[112px] md:h-[157px] w-[110px] md:w-[180px] -mr-12 md:-mr-20 relative z-0 shrink-0 select-none pointer-events-none transition-all duration-500 ease-out group-hover/number-card:opacity-0 group-hover/number-card:translate-x-4"
+                                        style={{ overflow: 'visible' }}
+                                    >
+                                        <text
+                                            x="50%"
+                                            y="142"
+                                            fill="black"
+                                            stroke="#e5e5e5"
+                                            strokeWidth="2"
+                                            textAnchor="middle"
+                                            fontSize="170"
+                                            fontWeight="900"
+                                            fontFamily="sans-serif"
+                                            className="drop-shadow-lg"
+                                        >
+                                            {i + 1}
+                                        </text>
+                                    </svg>
+
+                                    <NetflixCard
+                                        video={vidData}
+                                        isAdded={isAdded}
+                                        onToggleList={() => onToggleList(vidData)}
+                                        onItemClick={onItemClick}
+                                        videoVersion={videoVersion}
+                                        className="relative z-10"
+                                    />
+                                </div>
+                            );
+                        }
+
                         return (
                             <NetflixCard
                                 key={i}
@@ -63,6 +94,7 @@ const ContentRow = ({ title, videos = [], myList = [], onToggleList, onItemClick
                                 isAdded={isAdded}
                                 onToggleList={() => onToggleList(vidData)}
                                 onItemClick={onItemClick}
+                                videoVersion={videoVersion}
                             />
                         );
                     })}
@@ -80,15 +112,19 @@ const ContentRow = ({ title, videos = [], myList = [], onToggleList, onItemClick
     );
 };
 
-const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick }) => {
+const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick, videoVersion }) => {
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef(null);
     const isVideo = item.type === 'video' || !item.type || item.file; // Fallback detection
 
     // Safe access for video properties
-    // Safe access for video properties
     const isUrl = item.file && (item.file.startsWith('http') || item.file.startsWith('//'));
-    const videoPath = isUrl ? item.file : (isVideo && item.file && item.folder ? `/videos/Clips/${encodeURIComponent(item.folder)}/${encodeURIComponent(item.file)}` : '');
+    let videoPath = isUrl ? item.file : (isVideo && item.file && item.folder ? `/videos/Clips/${encodeURIComponent(item.folder)}/${encodeURIComponent(item.file)}` : '');
+
+    // Append version for cache busting if provided
+    if (videoPath && videoVersion) {
+        videoPath += `?v=${videoVersion}`;
+    }
 
     const getTitle = (file) => {
         if (!file) return item.title;

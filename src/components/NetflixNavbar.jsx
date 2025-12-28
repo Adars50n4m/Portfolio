@@ -69,7 +69,12 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
 
                     {/* Desktop Profile Dropdown */}
                     <div className="hidden md:flex items-center gap-2 cursor-pointer group relative">
-                        <div className="w-8 h-8 rounded overflow-hidden border border-transparent group-hover:border-white transition-all">
+                        <motion.div
+                            layoutId={`profile-img-${profile?.id || 1}`}
+                            layout
+                            className="w-8 h-8 rounded-md overflow-hidden border border-transparent group-hover:border-white relative z-50"
+                            transition={{ duration: 0.85, ease: "easeInOut" }}
+                        >
                             {profile?.img ? (
                                 <img src={profile.img} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
@@ -77,7 +82,7 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
                                     {profile ? profile.name[0] : 'U'}
                                 </div>
                             )}
-                        </div>
+                        </motion.div>
                         <ChevronDown className={`w-4 h-4 transition-transform group-hover:rotate-180`} />
 
                         {/* Dropdown - Profile Info Only */}

@@ -5,6 +5,11 @@ import { Vimeo } from 'vimeo';
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
+import ffmpeg from 'fluent-ffmpeg';
+import ffmpegPath from 'ffmpeg-static';
+import fs from 'fs';
+
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 dotenv.config();
 
@@ -100,6 +105,92 @@ app.get('/api/videos', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server Error' });
+    }
+});
+
+// Trim Video Endpoint
+app.post('/api/trim', async (req, res) => {
+    console.log('--- [TRIM] Request Received ---');
+    console.log('Body:', req.body);
+
+    const { videoPath, startTime, duration } = req.body;
+
+    try {
+        // Convert URL path to Filesystem path
+        const relativePath = decodeURIComponent(videoPath).replace(/^\//, '');
+        const fullPath = path.join(__dirname, '../public', relativePath);
+        console.log('[TRIM] Target File:', fullPath);
+
+        if (!fs.existsSync(fullPath)) {
+            console.error('[TRIM] File not found:', fullPath);
+            return res.status(404).json({ error: 'Video file not found' });
+        }
+
+        const dir = path.dirname(fullPath);
+        const ext = path.extname(fullPath);
+        const name = path.basename(fullPath, ext);
+        const originalPath = path.join(dir, `${name}_original${ext}`);
+        console.log('[TRIM] Original Backup:', originalPath);
+
+        // 1. Ensure backup exists (always trim from original)
+        if (!fs.existsSync(originalPath)) {
+            console.log('[TRIM] Creating backup...');
+            fs.copyFileSync(fullPath, originalPath);
+        }
+
+        // 2. Trim from Original -> Overwrite Main File
+        const tempOutputPath = path.join(dir, `${name}_temp${ext}`);
+
+        console.log('[TRIM] Starting FFmpeg...');
+        await new Promise((resolve, reject) => {
+            ffmpeg(originalPath)
+                .setStartTime(startTime)
+                .setDuration(duration)
+                .output(tempOutputPath)
+                .on('start', (cmd) => console.log('[TRIM] FFmpeg Command:', cmd))
+                .on('end', () => {
+                    console.log('[TRIM] FFmpeg Complete');
+                    resolve();
+                })
+                .on('error', (err) => {
+                    console.error('[TRIM] FFmpeg Error:', err);
+                    reject(err);
+                })
+                .run();
+        });
+
+        // 3. Replace main file with trimmed version
+        console.log('[TRIM] Replacing main file...');
+        if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+        fs.renameSync(tempOutputPath, fullPath);
+
+        console.log(`[TRIM] Success: ${name} trimmed.`);
+        res.json({ success: true, message: 'Video trimmed successfully' });
+
+    } catch (err) {
+        console.error('[TRIM] Critical Error:', err);
+        res.status(500).json({ error: 'Failed to trim video: ' + err.message });
+    }
+});
+
+// Revert Video Endpoint
+app.post('/api/revert', async (req, res) => {
+    const { videoPath } = req.body;
+    const relativePath = decodeURIComponent(videoPath).replace(/^\//, '');
+    const fullPath = path.join(__dirname, '../public', relativePath);
+
+    const dir = path.dirname(fullPath);
+    const ext = path.extname(fullPath);
+    const name = path.basename(fullPath, ext);
+    const originalPath = path.join(dir, `${name}_original${ext}`);
+
+    if (fs.existsSync(originalPath)) {
+        // Copy original back to main file
+        fs.copyFileSync(originalPath, fullPath);
+        console.log(`Reverted ${name} to original`);
+        res.json({ success: true, message: 'Video reverted to original' });
+    } else {
+        res.status(404).json({ error: 'Original backup not found (Video is already original)' });
     }
 });
 
