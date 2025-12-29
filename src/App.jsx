@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 // Build Timestamp: 2025-12-24T19:15:00 // Force Rebuild
 import ProfileGate from './components/ProfileGate';
 import NetflixNavbar from './components/NetflixNavbar';
@@ -270,6 +271,7 @@ const App = () => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen text-white overflow-x-hidden overflow-y-scroll font-sans relative">
+        <Analytics />
         <LiquidBackground />
         <CustomCursor />
         <LayoutGroup>
