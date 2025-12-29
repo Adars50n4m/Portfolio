@@ -37,7 +37,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                 animate={{ opacity: isExiting ? 0 : 1 }}
                 exit={{ opacity: 0 }}
                 transition={{
-                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
+                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
                 }}
                 className="text-3xl md:text-5xl font-normal mb-12 tracking-wide text-center"
             >
@@ -80,7 +80,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                             animate={{ opacity: isExiting ? 0 : 1 }}
                             exit={{ opacity: 0 }}
                             transition={{
-                                opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
+                                opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
                             }}
                             className="text-gray-400 text-sm md:text-lg group-hover:text-white transition-colors duration-200"
                         >
@@ -101,7 +101,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                         animate={{ opacity: isExiting ? 0 : 1 }}
                         exit={{ opacity: 0 }}
                         transition={{
-                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
+                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
                         }}
                         className="w-24 h-24 md:w-32 md:h-32 rounded-md overflow-hidden border-2 border-transparent group-hover:border-white transition-all duration-200 mb-4 shadow-lg flex items-center justify-center bg-[#141414] hover:bg-white/10"
                     >
@@ -120,7 +120,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                         animate={{ opacity: isExiting ? 0 : 1 }}
                         exit={{ opacity: 0 }}
                         transition={{
-                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
+                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
                         }}
                         className="text-gray-400 text-sm md:text-lg group-hover:text-white transition-colors duration-200"
                     >
@@ -134,7 +134,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                 animate={{ opacity: isExiting ? 0 : 1 }}
                 exit={{ opacity: 0 }}
                 transition={{
-                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
+                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
                 }}
                 className="mt-16 px-6 py-2 border border-gray-400 text-gray-400 uppercase tracking-widest text-sm hover:border-white hover:text-white transition-all duration-200"
             >
