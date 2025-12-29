@@ -5,6 +5,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Check for mobile viewport to resolve layoutId conflicts
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -31,9 +40,6 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
         { name: 'Education', icon: GraduationCap },
         { name: 'Contact', icon: Mail }
     ];
-
-    // Find active index for the sliding cursor
-    const activeIndex = navItems.findIndex(item => item.name === activeCategory);
 
     return (
         <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-[#141414]' : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent'}`}>
@@ -70,7 +76,7 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
                     {/* Desktop Profile Dropdown */}
                     <div className="hidden md:flex items-center gap-2 cursor-pointer group relative">
                         <motion.div
-                            layoutId={`profile-img-${profile?.id || 1}`}
+                            layoutId={!isMobile ? `profile-img-${profile?.id || 1}` : undefined}
                             layout
                             className="w-8 h-8 rounded-md overflow-hidden border border-transparent group-hover:border-white relative z-50"
                             transition={{ duration: 0.85, ease: "easeInOut" }}
@@ -103,7 +109,7 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
 
                     {/* Mobile Profile Icon */}
                     <motion.div
-                        layoutId={`profile-img-${profile?.id || 1}`}
+                        layoutId={isMobile ? `profile-img-${profile?.id || 1}` : undefined}
                         layout
                         transition={{ duration: 0.85, ease: "easeInOut" }}
                         className="w-8 h-8 rounded-md overflow-hidden border border-white/20 md:hidden relative z-50"
