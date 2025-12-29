@@ -46,16 +46,16 @@ const HeroBanner = () => {
             `}</style>
 
             {/* Content Info */}
-            <div className="absolute bottom-12 left-6 md:bottom-auto md:top-[50%] md:left-[60px] w-full md:w-1/2 z-10 text-white pr-4 md:pr-0">
+            <div className="absolute bottom-12 left-6 right-6 md:right-auto md:bottom-auto md:top-[50%] md:left-[60px] md:w-1/2 z-10 text-white pr-0 md:pr-0">
                 <motion.div
                     initial="hidden"
                     animate="visible"
                     custom={0}
                     variants={variants}
                 >
-                    <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter drop-shadow-2xl">
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 tracking-tighter drop-shadow-2xl">
                         ADARSH THAKUR
-                        <span className="block text-2xl md:text-3xl font-normal tracking-normal text-red-600 mt-2 md:mt-0">Video Editor & Graphic Designer</span>
+                        <span className="block text-xl sm:text-2xl md:text-3xl font-normal tracking-normal text-red-600 mt-2 md:mt-0">Video Editor & Graphic Designer</span>
                     </h1>
                 </motion.div>
 
