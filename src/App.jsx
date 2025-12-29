@@ -118,31 +118,49 @@ const recentWorkVideos = [
 const App = () => {
   const [currentProfile, setCurrentProfile] = useState(null);
   const [activeCategory, setActiveCategory] = useState("Home");
-  // Initialize My List (Empty initially, fetched from server)
-  const [myList, setMyList] = useState([]);
+  // Initialize My List (Hybrid: Local first, then sync)
+  const [myList, setMyList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('myList');
+      if (saved && saved !== "undefined" && saved !== "null") {
+        return JSON.parse(saved);
+      }
+    } catch (err) {
+      console.error("Error parsing Local My List:", err);
+    }
+    return [];
+  });
   const [selectedItem, setSelectedItem] = useState(null);
   const [playingVideo, setPlayingVideo] = useState(null);
 
-  // Fetch My List from Server on Mount
+  // Fetch My List from Server (Sync)
   useEffect(() => {
     const fetchMyList = async () => {
       try {
         const res = await fetch('/api/mylist');
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data)) {
+          if (Array.isArray(data) && data.length > 0) {
+            // Server has data, prioritize it (or merge logic could go here)
             setMyList(data);
+            localStorage.setItem('myList', JSON.stringify(data));
           }
         }
       } catch (err) {
-        console.error("Failed to fetch My List:", err);
+        // Silent fail on fetch - rely on local state
+        console.log("Offline mode or API unavailable, using local list.");
       }
     };
     fetchMyList();
   }, []);
 
-  // Sync My List to Server helper
-  const updateMyListOnServer = async (newList) => {
+  // Sync My List helper (Updates BOTH Local and Server)
+  const updateMyList = async (newList) => {
+    // 1. Update Local (Instant)
+    setMyList(newList);
+    localStorage.setItem('myList', JSON.stringify(newList));
+
+    // 2. Sync to Server (Background)
     try {
       await fetch('/api/mylist', {
         method: 'POST',
@@ -150,7 +168,7 @@ const App = () => {
         body: JSON.stringify({ videos: newList })
       });
     } catch (err) {
-      console.error("Failed to sync My List:", err);
+      console.error("Failed to sync My List to server:", err);
     }
   };
 
@@ -197,12 +215,16 @@ const App = () => {
 
 
   const toggleList = (video) => {
-    setMyList((prev) => {
-      const isExists = prev.find(v => v.file === video.file);
-      const newList = isExists ? prev.filter(v => v.file !== video.file) : [...prev, video];
-      updateMyListOnServer(newList);
-      return newList;
-    });
+    // 1. Calculate New State based on Current State
+    let newList;
+    const isExists = myList.find(v => v.file === video.file);
+    if (isExists) {
+      newList = myList.filter(v => v.file !== video.file);
+    } else {
+      newList = [...myList, video];
+    }
+    // 2. Update Both Local & Server
+    updateMyList(newList);
   };
 
   const handleItemClick = (item) => {
