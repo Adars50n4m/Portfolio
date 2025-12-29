@@ -10,25 +10,24 @@ const ProfileGate = ({ onSelectProfile }) => {
 
     const handleProfileClick = (profile) => {
         setIsExiting(true); // Trigger instant fade out
-
-        // Small delay to allow state to flush and exit animation to start naturally
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-            onSelectProfile(profile);
-        }, 100);
+        window.scrollTo(0, 0);
+        onSelectProfile(profile);
     };
 
     return (
         <motion.div
-            className="fixed inset-0 flex flex-col items-center justify-center text-white font-sans z-50"
+            className="fixed inset-0 flex flex-col items-center justify-center text-white font-sans z-[100]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            exit={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
         >
             {/* Background Layer */}
             <motion.div
                 className="absolute inset-0 bg-[#141414] -z-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
             />
 
@@ -37,7 +36,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                 animate={{ opacity: isExiting ? 0 : 1 }}
                 exit={{ opacity: 0 }}
                 transition={{
-                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
+                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
                 }}
                 className="text-3xl md:text-5xl font-normal mb-12 tracking-wide text-center"
             >
@@ -101,7 +100,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                         animate={{ opacity: isExiting ? 0 : 1 }}
                         exit={{ opacity: 0 }}
                         transition={{
-                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
+                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
                         }}
                         className="w-24 h-24 md:w-32 md:h-32 rounded-md overflow-hidden border-2 border-transparent group-hover:border-white transition-all duration-200 mb-4 shadow-lg flex items-center justify-center bg-[#141414] hover:bg-white/10"
                     >
@@ -120,7 +119,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                         animate={{ opacity: isExiting ? 0 : 1 }}
                         exit={{ opacity: 0 }}
                         transition={{
-                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
+                            opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
                         }}
                         className="text-gray-400 text-sm md:text-lg group-hover:text-white transition-colors duration-200"
                     >
@@ -134,7 +133,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                 animate={{ opacity: isExiting ? 0 : 1 }}
                 exit={{ opacity: 0 }}
                 transition={{
-                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
+                    opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
                 }}
                 className="mt-16 px-6 py-2 border border-gray-400 text-gray-400 uppercase tracking-widest text-sm hover:border-white hover:text-white transition-all duration-200"
             >
