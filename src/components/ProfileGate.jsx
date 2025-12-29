@@ -10,20 +10,25 @@ const ProfileGate = ({ onSelectProfile }) => {
 
     const handleProfileClick = (profile) => {
         setIsExiting(true); // Trigger instant fade out
-        window.scrollTo(0, 0);
-        onSelectProfile(profile);
+
+        // Small delay to allow state to flush and exit animation to start naturally
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+            onSelectProfile(profile);
+        }, 100);
     };
 
     return (
         <motion.div
             className="fixed inset-0 flex flex-col items-center justify-center text-white font-sans z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
         >
             {/* Background Layer */}
             <motion.div
                 className="absolute inset-0 bg-[#141414] -z-10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
             />
 
