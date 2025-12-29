@@ -20,4 +20,4 @@ const myListSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-export default mongoose.model('MyList', myListSchema);
+export default mongoose.models.MyList || mongoose.model('MyList', myListSchema);
