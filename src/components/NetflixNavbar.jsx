@@ -5,7 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.innerWidth < 768;
+        }
+        return false;
+    });
 
     // Check for mobile viewport to resolve layoutId conflicts
     useEffect(() => {
