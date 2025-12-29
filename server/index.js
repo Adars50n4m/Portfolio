@@ -50,8 +50,48 @@ mongoose.connect(MONGO_URI || 'mongodb://localhost:27017/portfolio', {
 
 // Video Routes
 import Video from './models/Video.js';
+import MyList from './models/MyList.js';
 
 const VIMEO_ACCESS_TOKEN = 'e4deedd05d3fdaa530fbf3ad51033078';
+
+// --- MY LIST ROUTES ---
+
+// GET: Fetch My List (Global)
+app.get('/api/mylist', async (req, res) => {
+    try {
+        let list = await MyList.findOne({ identifier: 'GLOBAL_USER' });
+        if (!list) {
+            // Return empty list if not found
+            return res.json([]);
+        }
+        res.json(list.videos);
+    } catch (err) {
+        console.error("Error fetching My List:", err);
+        res.status(500).json({ error: "Failed to fetch list" });
+    }
+});
+
+// POST: Update My List (Global)
+app.post('/api/mylist', async (req, res) => {
+    try {
+        const { videos } = req.body;
+        if (!Array.isArray(videos)) {
+            return res.status(400).json({ error: "Videos must be an array" });
+        }
+
+        // Update or Create
+        const updatedList = await MyList.findOneAndUpdate(
+            { identifier: 'GLOBAL_USER' },
+            { videos: videos },
+            { new: true, upsert: true, setDefaultsOnInsert: true }
+        );
+
+        res.json(updatedList.videos);
+    } catch (err) {
+        console.error("Error updating My List:", err);
+        res.status(500).json({ error: "Failed to update list" });
+    }
+});
 
 app.post('/api/admin/migrate-vimeo', async (req, res) => {
     console.log('Starting Vimeo Migration (Fetch Mode)...');

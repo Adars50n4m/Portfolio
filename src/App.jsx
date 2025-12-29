@@ -118,31 +118,41 @@ const recentWorkVideos = [
 const App = () => {
   const [currentProfile, setCurrentProfile] = useState(null);
   const [activeCategory, setActiveCategory] = useState("Home");
-  // Initialize My List with persistence or default item
-  const [myList, setMyList] = useState(() => {
-    try {
-      const saved = localStorage.getItem('myList');
-      if (saved && saved !== "undefined" && saved !== "null") {
-        return JSON.parse(saved);
-      }
-    } catch (err) {
-      console.error("Error parsing My List from storage:", err);
-    }
-    // Default fallback if storage is empty or corrupt
-    return [{ file: "Bihar Scene 2.mp4", folder: "Bihar", type: 'video' }];
-  });
+  // Initialize My List (Empty initially, fetched from server)
+  const [myList, setMyList] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [playingVideo, setPlayingVideo] = useState(null);
 
-  // Persist My List
+  // Fetch My List from Server on Mount
   useEffect(() => {
+    const fetchMyList = async () => {
+      try {
+        const res = await fetch('/api/mylist');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            setMyList(data);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch My List:", err);
+      }
+    };
+    fetchMyList();
+  }, []);
+
+  // Sync My List to Server helper
+  const updateMyListOnServer = async (newList) => {
     try {
-      localStorage.setItem('myList', JSON.stringify(myList));
-      console.log("Saved My List:", myList.length);
+      await fetch('/api/mylist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videos: newList })
+      });
     } catch (err) {
-      console.error("Failed to save My List:", err);
+      console.error("Failed to sync My List:", err);
     }
-  }, [myList]);
+  };
 
   // New State for Videos
   const [videoData, setVideoData] = useState({
@@ -189,8 +199,9 @@ const App = () => {
   const toggleList = (video) => {
     setMyList((prev) => {
       const isExists = prev.find(v => v.file === video.file);
-      if (isExists) return prev.filter(v => v.file !== video.file);
-      return [...prev, video];
+      const newList = isExists ? prev.filter(v => v.file !== video.file) : [...prev, video];
+      updateMyListOnServer(newList);
+      return newList;
     });
   };
 
