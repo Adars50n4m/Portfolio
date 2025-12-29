@@ -142,9 +142,15 @@ const App = () => {
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {
-            // Server serves as Source of Truth
-            setMyList(data);
-            localStorage.setItem('myList', JSON.stringify(data));
+            // SMART SYNC: If server is empty but local has data, PUSH local to server
+            if (data.length === 0 && myList.length > 0) {
+              console.log("Initializing Server with Local Data...");
+              updateMyList(myList);
+            } else {
+              // Standard Sync: Server is Source of Truth
+              setMyList(data);
+              localStorage.setItem('myList', JSON.stringify(data));
+            }
           }
         }
       } catch (err) {
