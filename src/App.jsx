@@ -134,24 +134,31 @@ const App = () => {
   const [playingVideo, setPlayingVideo] = useState(null);
 
   // Fetch My List from Server (Sync)
+  // Fetch My List from Server (Sync)
   useEffect(() => {
     const fetchMyList = async () => {
       try {
         const res = await fetch('/api/mylist');
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            // Server has data, prioritize it (or merge logic could go here)
+          if (Array.isArray(data)) {
+            // Server serves as Source of Truth
             setMyList(data);
             localStorage.setItem('myList', JSON.stringify(data));
           }
         }
       } catch (err) {
-        // Silent fail on fetch - rely on local state
         console.log("Offline mode or API unavailable, using local list.");
       }
     };
+
     fetchMyList();
+
+    // Auto-sync on window focus (for cross-device updates)
+    const onFocus = () => fetchMyList();
+    window.addEventListener('focus', onFocus);
+
+    return () => window.removeEventListener('focus', onFocus);
   }, []);
 
   // Sync My List helper (Updates BOTH Local and Server)
