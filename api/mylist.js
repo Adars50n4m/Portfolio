@@ -1,5 +1,5 @@
-import dbConnect from '../../lib/dbConnect.js';
-import MyList from '../../server/models/MyList.js';
+import dbConnect from '../lib/dbConnect.js';
+import MyList from '../server/models/MyList.js';
 
 export default async function handler(req, res) {
     await dbConnect();

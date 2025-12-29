@@ -1,5 +1,5 @@
-import dbConnect from '../../lib/dbConnect.js';
-import Video from '../../server/models/Video.js';
+import dbConnect from '../lib/dbConnect.js';
+import Video from '../server/models/Video.js';
 
 export default async function handler(req, res) {
     await dbConnect();
