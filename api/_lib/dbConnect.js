@@ -22,6 +22,7 @@ async function dbConnect() {
     if (!cached.promise) {
         const opts = {
             bufferCommands: true,
+            family: 4, // Force IPv4 to prevent ENOTFOUND on Vercel
         };
 
         cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
