@@ -80,7 +80,7 @@ const ProfileGate = ({ onSelectProfile }) => {
                             animate={{ opacity: isExiting ? 0 : 1 }}
                             exit={{ opacity: 0 }}
                             transition={{
-                                opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 1.2 },
+                                opacity: { duration: isExiting ? 0.1 : 0.8, delay: isExiting ? 0 : 0.8 },
                             }}
                             className="text-gray-400 text-sm md:text-lg group-hover:text-white transition-colors duration-200"
                         >
