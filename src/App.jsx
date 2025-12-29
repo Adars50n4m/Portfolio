@@ -120,8 +120,15 @@ const App = () => {
   const [activeCategory, setActiveCategory] = useState("Home");
   // Initialize My List with persistence or default item
   const [myList, setMyList] = useState(() => {
-    const saved = localStorage.getItem('myList');
-    if (saved) return JSON.parse(saved);
+    try {
+      const saved = localStorage.getItem('myList');
+      if (saved && saved !== "undefined" && saved !== "null") {
+        return JSON.parse(saved);
+      }
+    } catch (err) {
+      console.error("Error parsing My List from storage:", err);
+    }
+    // Default fallback if storage is empty or corrupt
     return [{ file: "Bihar Scene 2.mp4", folder: "Bihar", type: 'video' }];
   });
   const [selectedItem, setSelectedItem] = useState(null);
@@ -129,7 +136,12 @@ const App = () => {
 
   // Persist My List
   useEffect(() => {
-    localStorage.setItem('myList', JSON.stringify(myList));
+    try {
+      localStorage.setItem('myList', JSON.stringify(myList));
+      console.log("Saved My List:", myList.length);
+    } catch (err) {
+      console.error("Failed to save My List:", err);
+    }
   }, [myList]);
 
   // New State for Videos

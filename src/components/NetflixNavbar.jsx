@@ -102,7 +102,12 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
                     </div>
 
                     {/* Mobile Profile Icon */}
-                    <div className="w-8 h-8 rounded overflow-hidden border border-white/20 md:hidden relative">
+                    <motion.div
+                        layoutId={`profile-img-${profile?.id || 1}`}
+                        layout
+                        transition={{ duration: 0.85, ease: "easeInOut" }}
+                        className="w-8 h-8 rounded-md overflow-hidden border border-white/20 md:hidden relative z-50"
+                    >
                         {profile?.img ? (
                             <img src={profile.img} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
@@ -110,7 +115,7 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
                                 {profile ? profile.name[0] : 'U'}
                             </div>
                         )}
-                    </div>
+                    </motion.div>
 
                     {/* Mobile Hamburger Toggle (The Solid Retraction - Iteration 35) */}
                     <div className="md:hidden relative z-50 h-10 w-10 flex items-center justify-center">
