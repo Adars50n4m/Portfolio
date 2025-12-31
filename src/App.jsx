@@ -139,7 +139,7 @@ const App = () => {
   useEffect(() => {
     const fetchMyList = async () => {
       try {
-        const res = await fetch('/api/mylist');
+        const res = await fetch(`/api/mylist?t=${Date.now()}`);
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {
