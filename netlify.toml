@@ -4,8 +4,9 @@
 
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
   external_node_modules = ["express", "serverless-http", "mongoose", "cors", "dotenv", "@aws-sdk/client-s3"]
-  included_files = ["package.json", "server/models/**", "server/lib/**", "api/_models/**", "api/_lib/**"]
+  # included_files removed to let esbuild bundle everything
 
 [dev]
   command = "npm run dev"
@@ -14,7 +15,7 @@
 # Fix Routing: Redirect API calls to the Function
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/server/:splat"
+  to = "/.netlify/functions/api/:splat"
   status = 200
 
 # Fix SPA Routing: Redirect everything else to index.html
