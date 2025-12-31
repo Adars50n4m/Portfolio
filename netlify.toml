@@ -14,7 +14,7 @@
 # Fix Routing: Redirect API calls to the Function
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "/.netlify/functions/server/:splat"
   status = 200
 
 # Fix SPA Routing: Redirect everything else to index.html
