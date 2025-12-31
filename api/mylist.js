@@ -1,5 +1,6 @@
 import dbConnect from './_lib/dbConnect.js';
 import MyList from './_models/MyList.js';
+import { withCDN } from './_lib/cdn.js';
 
 export default async function handler(req, res) {
     await dbConnect();
@@ -10,7 +11,7 @@ export default async function handler(req, res) {
             if (!list) {
                 return res.status(200).json([]);
             }
-            return res.status(200).json(list.videos);
+            return res.status(200).json(withCDN(list.videos));
         } catch (err) {
             console.error("Error fetching My List:", err);
             return res.status(500).json({ error: "Failed to fetch list" });
@@ -28,7 +29,7 @@ export default async function handler(req, res) {
                 { new: true, upsert: true, setDefaultsOnInsert: true }
             );
 
-            return res.status(200).json(updatedList.videos);
+            return res.status(200).json(withCDN(updatedList.videos));
         } catch (err) {
             console.error("Error updating My List:", err);
             return res.status(500).json({ error: "Failed to update list" });

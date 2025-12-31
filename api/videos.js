@@ -1,5 +1,4 @@
-import dbConnect from './_lib/dbConnect.js';
-import Video from './_models/Video.js';
+import { withCDN } from './_lib/cdn.js';
 
 export default async function handler(req, res) {
     await dbConnect();
@@ -7,7 +6,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
         try {
             const videos = await Video.find({}).sort({ order: 1 });
-            return res.status(200).json(videos);
+            return res.status(200).json(withCDN(videos));
         } catch (err) {
             console.error("Error fetching videos:", err);
             return res.status(500).json({ message: 'Server Error' });
