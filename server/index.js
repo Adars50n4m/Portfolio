@@ -39,7 +39,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Database Connection
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI = process.env.MONGO_URI || process.env.NETLIFY_DATABASE_URL;
 
 mongoose.connect(MONGO_URI || 'mongodb://localhost:27017/portfolio', {
     useNewUrlParser: true,
