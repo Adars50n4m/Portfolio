@@ -150,7 +150,6 @@ const VideoPlayer = ({ video, onClose }) => {
                             controls={!isEditing}
                             autoPlay
                             playsInline
-                            crossOrigin="anonymous"
                             preload="auto"
                             onDurationChange={(e) => {
                                 const d = e.currentTarget.duration;
