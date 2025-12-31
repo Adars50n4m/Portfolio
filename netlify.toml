@@ -7,7 +7,6 @@
   node_bundler = "esbuild"
   external_node_modules = ["express", "serverless-http", "mongoose", "cors", "dotenv", "@aws-sdk/client-s3"]
   included_files = ["package.json", "server/models/**", "server/lib/**", "api/_models/**", "api/_lib/**"]
-  timeout = 26
 
 [dev]
   command = "npm run dev"
