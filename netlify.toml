@@ -1,6 +1,17 @@
+```toml
 [build]
   command = "npm run build"
   publish = "dist"
+
+[functions]
+  external_node_modules = ["express", "serverless-http", "mongoose", "cors", "dotenv", "@aws-sdk/client-s3"]
+  node_bundler = "esbuild"
+  included_files = ["server/models/**", "server/lib/**", "api/_models/**", "api/_lib/**"]
+  timeout = 60
+
+[dev]
+  command = "npm run dev"
+  targetPort = 5173
 
 [functions]
   directory = "netlify/functions"

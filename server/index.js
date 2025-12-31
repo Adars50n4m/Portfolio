@@ -47,12 +47,32 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // Database Connection
 const MONGO_URI = process.env.MONGO_URI || process.env.NETLIFY_DATABASE_URL;
 
-mongoose.connect(MONGO_URI || 'mongodb://localhost:27017/portfolio', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.error('MongoDB Connection Error:', err));
+let isConnected = false;
+
+const connectDB = async () => {
+    if (isConnected) return;
+    try {
+        await mongoose.connect(MONGO_URI || 'mongodb://localhost:27017/portfolio', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        isConnected = true;
+        console.log('MongoDB Connected');
+    } catch (err) {
+        console.error('MongoDB Connection Error:', err);
+    }
+};
+
+// Connect initially (optional, but good for warm starts)
+connectDB();
+
+// Ensure DB is connected for every request (Serverless best practice)
+app.use(async (req, res, next) => {
+    if (!isConnected) {
+        await connectDB();
+    }
+    next();
+});
 
 // Video Routes
 import Video from './models/Video.js';
