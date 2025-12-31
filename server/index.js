@@ -54,6 +54,24 @@ import MyList from './models/MyList.js';
 
 const VIMEO_ACCESS_TOKEN = 'e4deedd05d3fdaa530fbf3ad51033078';
 
+// --- R2 STORAGE ROUTES ---
+import { generateUploadUrl } from './lib/r2.js';
+
+app.post('/api/r2/upload-url', async (req, res) => {
+    try {
+        const { fileName, fileType } = req.body;
+        if (!fileName || !fileType) {
+            return res.status(400).json({ error: 'fileName and fileType are required' });
+        }
+
+        const { url, key } = await generateUploadUrl(fileName, fileType);
+        res.json({ url, key });
+    } catch (err) {
+        console.error('Error generating R2 upload URL:', err);
+        res.status(500).json({ error: 'Failed to generate upload URL' });
+    }
+});
+
 // --- MY LIST ROUTES ---
 
 // GET: Fetch My List (Global)
@@ -141,7 +159,21 @@ app.post('/api/admin/migrate-vimeo', async (req, res) => {
 app.get('/api/videos', async (req, res) => {
     try {
         const videos = await Video.find({}).sort({ order: 1 });
-        res.json(videos);
+
+        // Dynamically map to CDN URLs if R2 is configured
+        const R2_DOMAIN = process.env.R2_PUBLIC_DOMAIN; // e.g., https://pub-xyz.r2.dev
+
+        const videosWithCDN = videos.map(v => {
+            const videoObj = v.toObject();
+            if (R2_DOMAIN && videoObj.file && !videoObj.file.startsWith('http')) {
+                // Remove leading slash if present to avoid double slash
+                const relativePath = videoObj.file.startsWith('/') ? videoObj.file.slice(1) : videoObj.file;
+                videoObj.file = `${R2_DOMAIN}/${relativePath}`;
+            }
+            return videoObj;
+        });
+
+        res.json(videosWithCDN);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server Error' });
@@ -244,3 +276,5 @@ const PORT = process.env.PORT || 8080; // Azure often uses 8080
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+export default app;
