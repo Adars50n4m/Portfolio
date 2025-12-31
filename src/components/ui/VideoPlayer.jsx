@@ -149,6 +149,9 @@ const VideoPlayer = ({ video, onClose }) => {
                             className="w-full h-full object-contain"
                             controls={!isEditing}
                             autoPlay
+                            playsInline
+                            crossOrigin="anonymous"
+                            preload="auto"
                             onDurationChange={(e) => {
                                 const d = e.currentTarget.duration;
                                 setDuration(d);
