@@ -62,7 +62,6 @@ const VideoCard = ({ project, className = "" }) => {
                         muted={isMuted}
                         loop
                         playsInline
-                        crossOrigin="anonymous"
                         preload="metadata"
                         poster={project.thumbnail}
                         onLoadedMetadata={(e) => {
