@@ -220,10 +220,19 @@ app.post('/api/r2/upload-url', async (req, res) => {
     }
 });
 
-// Start Server
-const PORT = process.env.PORT || 8080; // Azure often uses 8080
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('Global Server Error:', err);
+    res.status(500).json({ error: 'Internal Server Error', details: err.message });
 });
+
+// Start Server
+const PORT = process.env.PORT || 8080;
+// Only listen if not running in serverless (Netlify Functions exports app, doesn't listen directly)
+if (process.env.NODE_ENV !== 'production' && !process.env.NETLIFY) {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
 
 export default app;
