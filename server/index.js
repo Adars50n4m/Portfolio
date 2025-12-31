@@ -13,8 +13,17 @@ import fs from 'fs';
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Handle __dirname and __filename in ES Modules and Bundled Environments
+let __dirname;
+try {
+    const { fileURLToPath } = await import('url');
+    const { dirname } = await import('path');
+    const __filename = fileURLToPath(import.meta.url);
+    __dirname = dirname(__filename);
+} catch (e) {
+    // Fallback for CommonJS or Bundled environments where import.meta is undefined
+    __dirname = process.cwd();
+}
 
 const app = express();
 const DEPLOYMENT_VERSION = '2025-12-25T02:10:00-Mobile-Menu-Hotfix';
