@@ -56,6 +56,7 @@ const VIMEO_ACCESS_TOKEN = 'e4deedd05d3fdaa530fbf3ad51033078';
 
 // --- R2 STORAGE ROUTES ---
 import { generateUploadUrl } from './lib/r2.js';
+import { withCDN } from '../api/_lib/cdn.js';
 
 app.post('/api/r2/upload-url', async (req, res) => {
     try {
@@ -82,7 +83,7 @@ app.get('/api/mylist', async (req, res) => {
             // Return empty list if not found
             return res.json([]);
         }
-        res.json(list.videos);
+        res.json(withCDN(list.videos));
     } catch (err) {
         console.error("Error fetching My List:", err);
         res.status(500).json({ error: "Failed to fetch list" });
@@ -104,7 +105,7 @@ app.post('/api/mylist', async (req, res) => {
             { new: true, upsert: true, setDefaultsOnInsert: true }
         );
 
-        res.json(updatedList.videos);
+        res.json(withCDN(updatedList.videos));
     } catch (err) {
         console.error("Error updating My List:", err);
         res.status(500).json({ error: "Failed to update list" });
@@ -160,20 +161,7 @@ app.get('/api/videos', async (req, res) => {
     try {
         const videos = await Video.find({}).sort({ order: 1 });
 
-        // Dynamically map to CDN URLs if R2 is configured
-        const R2_DOMAIN = process.env.R2_PUBLIC_DOMAIN; // e.g., https://pub-xyz.r2.dev
-
-        const videosWithCDN = videos.map(v => {
-            const videoObj = v.toObject();
-            if (R2_DOMAIN && videoObj.file && !videoObj.file.startsWith('http')) {
-                // Remove leading slash if present to avoid double slash
-                const relativePath = videoObj.file.startsWith('/') ? videoObj.file.slice(1) : videoObj.file;
-                videoObj.file = `${R2_DOMAIN}/${relativePath}`;
-            }
-            return videoObj;
-        });
-
-        res.json(videosWithCDN);
+        res.json(withCDN(videos));
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server Error' });
@@ -275,6 +263,25 @@ app.post('/api/revert', async (req, res) => {
 // Catch-all route to serve React App for non-API requests
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+// --- R2 STORAGE ROUTES ---
+import { generateUploadUrl } from './lib/r2.js';
+import { withCDN } from '../api/_lib/cdn.js';
+
+app.post('/api/r2/upload-url', async (req, res) => {
+    try {
+        const { fileName, fileType } = req.body;
+        if (!fileName || !fileType) {
+            return res.status(400).json({ error: 'fileName and fileType are required' });
+        }
+
+        const { url, key } = await generateUploadUrl(fileName, fileType);
+        res.json({ url, key });
+    } catch (err) {
+        console.error('Error generating R2 upload URL:', err);
+        res.status(500).json({ error: 'Failed to generate upload URL' });
+    }
 });
 
 // Start Server
