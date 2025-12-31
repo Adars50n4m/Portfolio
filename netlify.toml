@@ -1,28 +1,14 @@
-```toml
 [build]
   command = "npm run build"
   publish = "dist"
 
 [functions]
-  external_node_modules = ["express", "serverless-http", "mongoose", "cors", "dotenv", "@aws-sdk/client-s3"]
+  directory = "netlify/functions"
   node_bundler = "esbuild"
+  external_node_modules = ["express", "serverless-http", "mongoose", "cors", "dotenv", "@aws-sdk/client-s3"]
   included_files = ["server/models/**", "server/lib/**", "api/_models/**", "api/_lib/**"]
-  timeout = 60
+  timeout = 26
 
 [dev]
   command = "npm run dev"
   targetPort = 5173
-
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
