@@ -5,11 +5,11 @@ import { Vimeo } from 'vimeo';
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
-import ffmpeg from 'fluent-ffmpeg';
-import ffmpegPath from 'ffmpeg-static';
+// import ffmpeg from 'fluent-ffmpeg';
+// import ffmpegPath from 'ffmpeg-static';
 import fs from 'fs';
 
-ffmpeg.setFfmpegPath(ffmpegPath);
+// ffmpeg.setFfmpegPath(ffmpegPath);
 
 dotenv.config();
 
@@ -214,6 +214,12 @@ app.post('/api/trim', async (req, res) => {
         const tempOutputPath = path.join(dir, `${name}_temp${ext}`);
 
         console.log('[TRIM] Starting FFmpeg...');
+
+        // Lazy Load FFmpeg
+        const { default: ffmpeg } = await import('fluent-ffmpeg');
+        const { default: ffmpegPath } = await import('ffmpeg-static');
+        ffmpeg.setFfmpegPath(ffmpegPath);
+
         await new Promise((resolve, reject) => {
             ffmpeg(originalPath)
                 .setStartTime(startTime)
