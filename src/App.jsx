@@ -14,6 +14,7 @@ import SkillsView from './components/sections/SkillsView';
 import ExperienceView from './components/sections/ExperienceView';
 import EducationView from './components/sections/EducationView';
 import LiquidBackground from './components/ui/LiquidBackground';
+import MyListView from './components/MyListView';
 import CustomCursor from './components/ui/CustomCursor';
 // import ZoomTransition from './components/ui/ZoomTransition'; // Removed as per user request
 
@@ -144,15 +145,14 @@ const App = () => {
           const data = await res.json();
           if (Array.isArray(data)) {
             // SMART SYNC: If server is empty but local has data, PUSH local to server
-            // SMART SYNC DISABLED: Prevents stale local data from corrupting server
-            // if (data.length === 0 && myList.length > 0) {
-            //   console.log("Initializing Server with Local Data...");
-            //   updateMyList(myList);
-            // } else {
-            // Standard Sync: Server is Source of Truth
-            setMyList(data);
-            localStorage.setItem('myList', JSON.stringify(data));
-            // }
+            if (data.length === 0 && myList.length > 0) {
+              console.log("Initializing Server with Local Data...");
+              updateMyList(myList);
+            } else {
+              // Standard Sync: Server is Source of Truth
+              setMyList(data);
+              localStorage.setItem('myList', JSON.stringify(data));
+            }
           }
         }
       } catch (err) {
@@ -259,7 +259,7 @@ const App = () => {
   const showContact = activeCategory === "Contact";
 
   // Video Categories
-  const showVideos = showHome;
+
 
   // Add videoVersion state for cache busting
   const [videoVersion, setVideoVersion] = useState(Date.now());
@@ -303,12 +303,10 @@ const App = () => {
 
                     <AnimatePresence mode="wait">
                       {/* --- VIDEO PROJECTS (Home Feed) --- */}
-                      {(showVideos) && (
+                      {(showHome) && (
                         <PageTransition key="home-videos">
-                          {/* --- MY LIST (Conditional) --- */}
-                          {myList.length > 0 && (
-                            <ContentRow title="My List" videos={myList} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} numbered={true} />
-                          )}
+                          {/* --- MY LIST (Always Visible) --- */}
+                          <ContentRow title="My List" videos={myList} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} numbered={true} />
 
                           {/* --- VIDEO CATEGORIES --- */}
 
@@ -319,6 +317,18 @@ const App = () => {
                           <ContentRow title="Economics & War" videos={videoData.financeWar} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
                           <ContentRow title="Maps & Graphics" videos={videoData.mapsMotion} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
                           <ContentRow title="Social Documentaries" videos={videoData.socialImpact} myList={myList} onToggleList={toggleList} onItemClick={handleItemClick} videoVersion={videoVersion} />
+                        </PageTransition>
+                      )}
+
+                      {/* --- MY LIST VIEW --- */}
+                      {activeCategory === "My List" && (
+                        <PageTransition key="mylist-view">
+                          <MyListView
+                            myList={myList}
+                            onToggleList={toggleList}
+                            onItemClick={handleItemClick}
+                            videoVersion={videoVersion}
+                          />
                         </PageTransition>
                       )}
 

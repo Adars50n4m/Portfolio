@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, Menu, X, ChevronDown, User, Home, Zap, Briefcase, GraduationCap, Mail, ChevronRight } from 'lucide-react';
+import { Search, Bell, Menu, X, ChevronDown, User, Home, Zap, Briefcase, GraduationCap, Mail, ChevronRight, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) => {
@@ -40,6 +40,7 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
 
     const navItems = [
         { name: 'Home', icon: Home },
+        { name: 'My List', icon: Plus },
         { name: 'Skills', icon: Zap },
         { name: 'Experience', icon: Briefcase },
         { name: 'Education', icon: GraduationCap },
