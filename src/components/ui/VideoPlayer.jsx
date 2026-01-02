@@ -60,8 +60,18 @@ const VideoPlayer = ({ video, onClose }) => {
                     </div>
                 )}
 
-                {hasVideo ? (
-                    isUrl && videoPath.includes('youtu') ? (
+                {hasVideo || video.vimeoId ? (
+                    video.vimeoId ? (
+                        <iframe
+                            src={`https://player.vimeo.com/video/${video.vimeoId.replace('/videos/', '')}?autoplay=1&title=0&byline=0&portrait=0`}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="autoplay; fullscreen; picture-in-picture"
+                            allowFullScreen
+                            title={video.title}
+                            onLoad={() => setIsLoading(false)}
+                        />
+                    ) : isUrl && videoPath.includes('youtu') ? (
                         <iframe
                             src={`https://www.youtube.com/embed/${videoPath.split('/').pop().split('?')[0]}?autoplay=1`}
                             className="w-full h-full object-contain"

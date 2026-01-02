@@ -35,6 +35,9 @@ const videoSchema = new mongoose.Schema({
     order: {
         type: Number,
         default: 0
+    },
+    vimeoId: {
+        type: String // Stores the Vimeo URI (e.g., "/videos/12345678")
     }
 }, { timestamps: true });
 

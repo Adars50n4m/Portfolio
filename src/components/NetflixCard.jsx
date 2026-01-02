@@ -83,20 +83,22 @@ const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick, videoVer
                 )}
 
                 {isVideo ? (
-                    <video
-                        ref={videoRef}
-                        src={videoPath}
-                        className="w-full h-full object-cover relative z-10 hover:opacity-100 transition-opacity duration-300"
-                        muted
-                        loop={false}
-                        preload="metadata"
-                        poster={item.thumbnail}
-                        onLoadedData={() => !item.thumbnail && setIsLoading(false)} // Clear loader if video loads and no thumb
-                        onError={(e) => {
-                            e.target.style.display = 'none';
-                            setIsLoading(false); // Stop loading on error
-                        }}
-                    />
+                    videoPath && !videoPath.includes('youtu') && !videoPath.includes('vimeo') && (
+                        <video
+                            ref={videoRef}
+                            src={videoPath}
+                            className="w-full h-full object-cover relative z-10 hover:opacity-100 transition-opacity duration-300"
+                            muted
+                            loop={false}
+                            preload="metadata"
+                            poster={item.thumbnail}
+                            onLoadedData={() => !item.thumbnail && setIsLoading(false)} // Clear loader if video loads and no thumb
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                                setIsLoading(false); // Stop loading on error
+                            }}
+                        />
+                    )
                 ) : (
                     // Resume Card Layout
                     <div className="w-full h-full bg-gradient-to-br from-blue-900 to-black p-4 flex flex-col justify-center border border-white/10 relative z-20">
