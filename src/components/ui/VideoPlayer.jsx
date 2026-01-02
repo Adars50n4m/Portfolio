@@ -6,6 +6,14 @@ const VideoPlayer = ({ video, onClose }) => {
     const videoRef = useRef(null);
     const trackRef = useRef(null);
     const [loadError, setLoadError] = React.useState(false);
+    const [isEditing, setIsEditing] = React.useState(false);
+
+    const [duration, setDuration] = React.useState(0);
+    const [trimStart, setTrimStart] = React.useState(0);
+    const [trimEnd, setTrimEnd] = React.useState(0);
+    const [isDragging, setIsDragging] = React.useState(false);
+    const [isProcessing, setIsProcessing] = React.useState(false);
+    const [refreshKey, setRefreshKey] = React.useState(0); // To force reload video
 
     // Reset error state when video changes
     useEffect(() => {
@@ -38,14 +46,7 @@ const VideoPlayer = ({ video, onClose }) => {
     // Fallback if no video path or external link logic needed later
     const hasVideo = !!videoPath && !loadError;
 
-    const [isEditing, setIsEditing] = React.useState(false);
 
-    const [duration, setDuration] = React.useState(0);
-    const [trimStart, setTrimStart] = React.useState(0);
-    const [trimEnd, setTrimEnd] = React.useState(0);
-    const [isDragging, setIsDragging] = React.useState(false);
-    const [isProcessing, setIsProcessing] = React.useState(false);
-    const [refreshKey, setRefreshKey] = React.useState(0); // To force reload video
 
     const handleTrim = async () => {
         setIsProcessing(true);

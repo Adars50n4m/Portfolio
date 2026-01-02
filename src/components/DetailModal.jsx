@@ -7,8 +7,10 @@ const DetailModal = ({ item, onClose, onPlay, onToggleList, isAdded }) => {
     const [liked, setLiked] = React.useState(false);
 
     useEffect(() => {
-        setViewMode('details');
-        setLiked(false);
+        if (item) {
+            setViewMode('details');
+            setLiked(false);
+        }
     }, [item]);
 
     if (!item) return null;
