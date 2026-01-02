@@ -6,12 +6,7 @@ const DetailModal = ({ item, onClose, onPlay, onToggleList, isAdded }) => {
     const [viewMode, setViewMode] = React.useState('details'); // 'details' | 'gallery'
     const [liked, setLiked] = React.useState(false);
 
-    useEffect(() => {
-        if (item) {
-            setViewMode('details');
-            setLiked(false);
-        }
-    }, [item]);
+
 
     if (!item) return null;
 

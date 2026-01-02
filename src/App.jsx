@@ -153,6 +153,8 @@ const App = () => {
               if (saved) currentLocal = JSON.parse(saved);
             } catch (e) { console.error(e); }
 
+            const mergedMap = new Map();
+
             // 1. Add Server items (Base)
             data.forEach(item => mergedMap.set(item.file, item));
 
@@ -390,6 +392,7 @@ const App = () => {
 
                   {/* Modal for Details */}
                   <DetailModal
+                    key={selectedItem ? selectedItem.file : 'modal'}
                     item={selectedItem}
                     onClose={closeDetailModal}
                     onPlay={(video) => setPlayingVideo(video)}
