@@ -1,3 +1,4 @@
+/* eslint-env node */ /* global require, exports */
 const serverless = require('serverless-http');
 // esbuild will transpile the ESM defaults from index.js into a CJS-compatible require
 const appModule = require('../../server/index.js');

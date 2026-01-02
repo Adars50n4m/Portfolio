@@ -1,3 +1,4 @@
+/* eslint-env node */ /* global process, global */
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGO_URI;

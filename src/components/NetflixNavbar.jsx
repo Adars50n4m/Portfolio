@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Bell, Menu, X, ChevronDown, User, Home, Zap, Briefcase, GraduationCap, Mail, ChevronRight, Plus } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
 
 const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) => {
     const [isScrolled, setIsScrolled] = useState(false);

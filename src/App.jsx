@@ -6,7 +6,7 @@ import NetflixNavbar from './components/NetflixNavbar';
 import HeroBanner from './components/HeroBanner';
 import ContentRow from './components/ContentRow';
 import DetailModal from './components/DetailModal';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import PageTransition from './components/ui/PageTransition';
 import Contact from './components/Contact';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -19,7 +19,7 @@ import CustomCursor from './components/ui/CustomCursor';
 // import ZoomTransition from './components/ui/ZoomTransition'; // Removed as per user request
 
 // --- DATA IMPORT ---
-import { skills, experience, education, contactInfo } from './data/resumeData';
+import { skills, experience, education } from './data/resumeData';
 
 import VideoPlayer from './components/ui/VideoPlayer';
 
@@ -108,13 +108,7 @@ const socialImpactVideos = [
 ];
 
 // --- FEATURED PORTFOLIO LIST (Fixed for everyone) ---
-const recentWorkVideos = [
-  { file: "Bihar Scene 2.mp4", folder: "Bihar", type: 'video' },
-  { file: "Bengal Femine 3.mp4", folder: "Bihar", type: 'video' },
-  { file: "Lenin 1.mp4", folder: "Lenin Video", type: 'video' },
-  { file: "Nalanda Study 2_1.mp4", folder: "Bihar", type: 'video' },
-  { file: "Slum.mp4", folder: "Slum", type: 'video' }
-];
+
 
 
 const App = () => {
@@ -178,7 +172,7 @@ const App = () => {
             }
           }
         }
-      } catch (err) {
+      } catch {
         console.log("Offline mode or API unavailable, using local list.");
       }
     };
@@ -242,7 +236,7 @@ const App = () => {
           };
           setVideoData(newVideoData);
         }
-      } catch (err) {
+      } catch {
         console.log("Using local fallback data (Backend offline or DB empty)");
         // Fallback is already set in initial state
       }
@@ -404,6 +398,7 @@ const App = () => {
                   <AnimatePresence>
                     {playingVideo && (
                       <VideoPlayer
+                        key={playingVideo ? playingVideo.file : 'player'}
                         video={playingVideo}
                         onClose={() => {
                           setPlayingVideo(null);

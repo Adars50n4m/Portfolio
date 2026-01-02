@@ -1,10 +1,12 @@
+/* eslint-env node */ /* global process */
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { Vimeo } from 'vimeo';
 // import ffmpeg from 'fluent-ffmpeg';
 // import ffmpegPath from 'ffmpeg-static';
-import fs from 'fs';
+import dotenv from 'dotenv';
+import path from 'path';
 
 // ffmpeg.setFfmpegPath(ffmpegPath);
 
@@ -17,7 +19,7 @@ try {
     const { dirname } = await import('path');
     const __filename = fileURLToPath(import.meta.url);
     __dirname = dirname(__filename);
-} catch (e) {
+} catch {
     // Fallback for CommonJS or Bundled environments where import.meta is undefined
     __dirname = process.cwd();
 }
@@ -134,7 +136,7 @@ app.post('/api/mylist', async (req, res) => {
         res.json(withCDN(updatedList.videos));
     } catch (err) {
         console.error("Error updating My List:", err);
-        res.status(500).json({ error: "Failed to update list" });
+        res.status(500).json({ error: "Failed to update list", details: err.message });
     }
 });
 
@@ -201,26 +203,10 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-// --- R2 STORAGE ROUTES ---
-import { generateUploadUrl } from './lib/r2.js';
-import { withCDN } from '../api/_lib/cdn.js';
 
-app.post('/api/r2/upload-url', async (req, res) => {
-    try {
-        const { fileName, fileType } = req.body;
-        if (!fileName || !fileType) {
-            return res.status(400).json({ error: 'fileName and fileType are required' });
-        }
-
-        const { url, key } = await generateUploadUrl(fileName, fileType);
-        res.json({ url, key });
-    } catch (err) {
-        console.error('Error generating R2 upload URL:', err);
-        res.status(500).json({ error: 'Failed to generate upload URL' });
-    }
-});
 
 // Global Error Handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
     console.error('Global Server Error:', err);
     res.status(500).json({ error: 'Internal Server Error', details: err.message });

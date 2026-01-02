@@ -1,9 +1,10 @@
+/* eslint-env node */ /* global */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import R2, { R2_BUCKET_NAME } from './lib/r2.js';
-import mime from 'mime-types'; // need to install this or use simple mapping
+// import mime from 'mime-types'; // need to install this or use simple mapping
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 
 const CustomCursor = () => {
-    const cursorRef = useState({ x: 0, y: 0 }); // We don't need state for position, just refs
     // Actually, let's use refs entirely to avoid re-renders
     const cursorDotRef = useRef(null);
     const cursorOutlineRef = useRef(null);

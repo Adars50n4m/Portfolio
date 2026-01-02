@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { X, Play, Plus, ThumbsUp, Check, ArrowLeft } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
 
 const DetailModal = ({ item, onClose, onPlay, onToggleList, isAdded }) => {
     const [viewMode, setViewMode] = React.useState('details'); // 'details' | 'gallery'

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useTransform, useScroll } from 'framer-motion';
+import { motion, useTransform, useScroll } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import VideoCard from './ui/VideoCard';
 
 const projects = [
@@ -17,7 +17,7 @@ const Portfolio = () => {
         target: targetRef,
     });
 
-    const isMobile = window.innerWidth < 768; // Simple check for initial render, usually better with hook
+
     const x = useTransform(scrollYProgress, [0, 1], ["1%", "-95%"]);
 
     return (

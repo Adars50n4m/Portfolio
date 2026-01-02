@@ -1,6 +1,6 @@
 import React from 'react';
 
-const GlowingCard = ({ children, className = "", delay = 0 }) => {
+const GlowingCard = ({ children, className = "" }) => {
     return (
         <div
             className={`relative group bg-neutral-900/50 border border-white/5 rounded-2xl overflow-hidden backdrop-blur-sm ${className}`}

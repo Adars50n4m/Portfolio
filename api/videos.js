@@ -1,4 +1,6 @@
 import { withCDN } from './_lib/cdn.js';
+import dbConnect from './_lib/dbConnect.js';
+import Video from '../server/models/Video.js';
 
 export default async function handler(req, res) {
     await dbConnect();

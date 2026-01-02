@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import { Play, Check, Plus, ThumbsUp, ChevronDown } from 'lucide-react';
 import Skeleton from './ui/Skeleton';
 
@@ -37,7 +37,7 @@ const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick, videoVer
         setIsHovered(true);
         if (isVideo) {
             setTimeout(() => {
-                if (videoRef.current) videoRef.current.play().catch(e => { });
+                if (videoRef.current) videoRef.current.play().catch(() => { });
             }, 300);
         }
     };

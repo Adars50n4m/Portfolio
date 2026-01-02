@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 
 const profiles = [
     { id: 1, name: 'Adarsh', color: 'bg-blue-500', img: '/images/editor_profile_3.png' },

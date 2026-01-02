@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play, Plus, ThumbsUp, ChevronDown, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import NetflixCard from './NetflixCard';
 
 const ContentRow = ({ title, videos = [], myList = [], onToggleList, onItemClick, videoVersion, numbered = false }) => {

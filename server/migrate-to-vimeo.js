@@ -1,4 +1,5 @@
 
+/* eslint-env node */ /* global process */
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { Vimeo } from 'vimeo';
@@ -17,7 +18,7 @@ const VIMEO_CLIENT_SECRET = 'placeholder_secret';
 const client = new Vimeo(VIMEO_CLIENT_ID, VIMEO_CLIENT_SECRET, VIMEO_ACCESS_TOKEN);
 
 const uploadVideoToVimeo = async (video) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         console.log(`Starting upload for: ${video.title} (${video.file})`);
 
         // Use "pull" upload approach
@@ -32,7 +33,7 @@ const uploadVideoToVimeo = async (video) => {
                 name: video.title,
                 description: video.meta || `Category: ${video.category}`
             }
-        }, (error, body, statusCode, headers) => {
+        }, (error, body, statusCode) => {
             if (error) {
                 console.error(`Error uploading ${video.title}:`, error);
                 return resolve(null); // Resolve null to continue loop

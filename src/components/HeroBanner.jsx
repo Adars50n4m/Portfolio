@@ -1,6 +1,6 @@
 import React from 'react';
 import { Play, Info } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 
 const HeroBanner = () => {
     // Video Background

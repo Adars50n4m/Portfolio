@@ -1,3 +1,4 @@
+/* eslint-env node */ /* global process */
 import mongoose from 'mongoose';
 import Video from './models/Video.js';
 import dotenv from 'dotenv';

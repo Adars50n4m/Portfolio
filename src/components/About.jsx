@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import GlowingCard from './ui/GlowingCard';
 import { Video, Zap, Layers, Wand2, Calendar, Award } from 'lucide-react';
 

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import { Play, Volume2, VolumeX } from 'lucide-react';
 
 const VideoCard = ({ project, className = "" }) => {

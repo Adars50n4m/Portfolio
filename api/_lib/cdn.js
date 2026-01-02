@@ -1,3 +1,4 @@
+/* eslint-env node */ /* global process */
 export function withCDN(data) {
     const R2_DOMAIN = process.env.R2_PUBLIC_DOMAIN || 'https://pub-edb0dfe680944457a6f4daab89bcf28f.r2.dev';
 
