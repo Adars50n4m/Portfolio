@@ -144,14 +144,30 @@ const App = () => {
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {
-            // SMART SYNC: If server is empty but local has data, PUSH local to server
-            if (data.length === 0 && myList.length > 0) {
-              console.log("Initializing Server with Local Data...");
-              updateMyList(myList);
-            } else {
-              // Standard Sync: Server is Source of Truth
-              setMyList(data);
-              localStorage.setItem('myList', JSON.stringify(data));
+            // MERGE SYNC: Combine Local and Server data to prevent loss
+            // This handles cases where backend was offline and missed writes
+            const mergedMap = new Map();
+
+            // 1. Add Server items (Base)
+            data.forEach(item => mergedMap.set(item.file, item));
+
+            // 2. Add Local items (if missing from server)
+            myList.forEach(item => {
+              if (!mergedMap.has(item.file)) {
+                mergedMap.set(item.file, item);
+              }
+            });
+
+            const mergedList = Array.from(mergedMap.values());
+
+            // 3. Update State
+            setMyList(mergedList);
+            localStorage.setItem('myList', JSON.stringify(mergedList));
+
+            // 4. If merged list has more items than server, sync back to server
+            if (mergedList.length > data.length) {
+              console.log("Syncing unsaved local items to server...");
+              updateMyList(mergedList);
             }
           }
         }
