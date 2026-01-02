@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Check, Plus, ThumbsUp, ChevronDown } from 'lucide-react';
+import Skeleton from './ui/Skeleton';
 
 const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick, videoVersion, className }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const videoRef = useRef(null);
     const isVideo = item.type === 'video' || !item.type || item.file; // Fallback detection
 
@@ -64,12 +66,19 @@ const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick, videoVer
         >
             {/* Base Content */}
             <div className="w-full h-full rounded overflow-hidden relative bg-zinc-800 border-[0.5px] border-white/10 group-hover/card:border-white/40 transition-colors">
+
+                {/* Custom Skeleton Loader */}
+                {isLoading && (
+                    <Skeleton className="absolute inset-0 z-20" />
+                )}
+
                 {/* Thumbnail Fallback Layer */}
                 {isVideo && item.thumbnail && (
                     <img
                         src={item.thumbnail}
                         alt={item.title || "Video thumbnail"}
                         className="absolute inset-0 w-full h-full object-cover opacity-100 z-0 bg-zinc-800"
+                        onLoad={() => setIsLoading(false)}
                     />
                 )}
 
@@ -82,7 +91,11 @@ const NetflixCard = ({ video: item, isAdded, onToggleList, onItemClick, videoVer
                         loop={false}
                         preload="metadata"
                         poster={item.thumbnail}
-                        onError={(e) => e.target.style.display = 'none'} // Hide if fails
+                        onLoadedData={() => !item.thumbnail && setIsLoading(false)} // Clear loader if video loads and no thumb
+                        onError={(e) => {
+                            e.target.style.display = 'none';
+                            setIsLoading(false); // Stop loading on error
+                        }}
                     />
                 ) : (
                     // Resume Card Layout
