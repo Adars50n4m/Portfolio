@@ -17,8 +17,14 @@ export function withCDN(data) {
 
         // Apply Logic
         if (R2_DOMAIN && videoObj.file && typeof videoObj.file === 'string' && !videoObj.file.startsWith('http')) {
-            // Remove leading slash if present
-            const relativePath = videoObj.file.startsWith('/') ? videoObj.file.slice(1) : videoObj.file;
+            let relativePath = videoObj.file.startsWith('/') ? videoObj.file.slice(1) : videoObj.file;
+
+            // FIX: If folder exists and path is just a filename (doesn't contain folder), construct full path
+            // This mirrors NetflixCard logic: /videos/Clips/${folder}/${file}
+            if (videoObj.folder && !relativePath.includes('videos/Clips')) {
+                relativePath = `videos/Clips/${videoObj.folder}/${relativePath}`;
+            }
+
             videoObj.file = `${R2_DOMAIN}/${relativePath}`;
         }
         return videoObj;
