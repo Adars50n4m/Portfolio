@@ -61,17 +61,7 @@ const VideoPlayer = ({ video, onClose }) => {
                 )}
 
                 {hasVideo || video.vimeoId ? (
-                    video.vimeoId ? (
-                        <iframe
-                            src={`https://player.vimeo.com/video/${video.vimeoId.replace('/videos/', '')}?autoplay=1&title=0&byline=0&portrait=0`}
-                            className="w-full h-full"
-                            frameBorder="0"
-                            allow="autoplay; fullscreen; picture-in-picture"
-                            allowFullScreen
-                            title={video.title}
-                            onLoad={() => setIsLoading(false)}
-                        />
-                    ) : isUrl && videoPath.includes('youtu') ? (
+                    isUrl && videoPath.includes('youtu') ? (
                         <iframe
                             src={`https://www.youtube.com/embed/${videoPath.split('/').pop().split('?')[0]}?autoplay=1`}
                             className="w-full h-full object-contain"
@@ -81,7 +71,7 @@ const VideoPlayer = ({ video, onClose }) => {
                             title="YouTube video player"
                             onLoad={() => setIsLoading(false)}
                         />
-                    ) : (
+                    ) : hasVideo ? (
                         <video
                             ref={videoRef}
                             src={videoPath}
@@ -101,7 +91,17 @@ const VideoPlayer = ({ video, onClose }) => {
                         >
                             Your browser does not support the video tag.
                         </video>
-                    )
+                    ) : video.vimeoId ? (
+                        <iframe
+                            src={`https://player.vimeo.com/video/${video.vimeoId.replace('/videos/', '')}?autoplay=1&title=0&byline=0&portrait=0`}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="autoplay; fullscreen; picture-in-picture"
+                            allowFullScreen
+                            title={video.title}
+                            onLoad={() => setIsLoading(false)}
+                        />
+                    ) : null
                 ) : (
                     // Error UI
                     <div className="flex flex-col items-center justify-center h-full text-white space-y-4 p-8 text-center bg-black/90 w-full">
@@ -124,7 +124,7 @@ const VideoPlayer = ({ video, onClose }) => {
                     </div>
                 )}
             </div>
-        </motion.div>
+        </motion.div >
     );
 };
 
