@@ -15,6 +15,10 @@ const myListSchema = new mongoose.Schema({
         title: String,
         thumbnail: String,
         meta: String,
+        dates: String,
+        organization: String,
+        description: String,
+        details: [String], // For bullet points
         addedAt: { type: Date, default: Date.now }
     }]
 }, { timestamps: true });
