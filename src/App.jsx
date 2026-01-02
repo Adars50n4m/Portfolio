@@ -146,13 +146,18 @@ const App = () => {
           if (Array.isArray(data)) {
             // MERGE SYNC: Combine Local and Server data to prevent loss
             // This handles cases where backend was offline and missed writes
-            const mergedMap = new Map();
+            // 0. Get Latest Local Data (Avoid Closure Stale State)
+            let currentLocal = [];
+            try {
+              const saved = localStorage.getItem('myList');
+              if (saved) currentLocal = JSON.parse(saved);
+            } catch (e) { console.error(e); }
 
             // 1. Add Server items (Base)
             data.forEach(item => mergedMap.set(item.file, item));
 
             // 2. Add Local items (if missing from server)
-            myList.forEach(item => {
+            currentLocal.forEach(item => {
               if (!mergedMap.has(item.file)) {
                 mergedMap.set(item.file, item);
               }
