@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/react';
 import React, { useState, useEffect } from 'react';
-// Build Timestamp: 2025-12-24T19:15:00 // Force Rebuild
+// Build Timestamp: 2026-01-02T18:35:00 // Force Rebuild
 import ProfileGate from './components/ProfileGate';
 import NetflixNavbar from './components/NetflixNavbar';
 import HeroBanner from './components/HeroBanner';
