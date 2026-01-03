@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
 
 const HeroBanner = () => {
     // Video Background
-    const videoSource = "https://pub-edb0dfe680944457a6f4daab89bcf28f.r2.dev/videos/Clips/Bihar/Hero%20Banner.mp4";
+    const videoSource = "https://pub-edb0dfe680944457a6f4daab89bcf28f.r2.dev/videos/Clips/Hero%20Banner.mp4";
 
     const variants = {
         hidden: { opacity: 0, y: 50 },
