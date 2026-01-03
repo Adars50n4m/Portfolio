@@ -40,7 +40,6 @@ const NetflixNavbar = ({ activeCategory, onSelectCategory, profile, onLogout }) 
 
     const navItems = [
         { name: 'Home', icon: Home },
-        { name: 'My List', icon: Plus },
         { name: 'Skills', icon: Zap },
         { name: 'Experience', icon: Briefcase },
         { name: 'Education', icon: GraduationCap },
